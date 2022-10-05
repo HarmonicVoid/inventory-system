@@ -1,12 +1,8 @@
 import React from 'react';
 import PartsAddedLoggerTable from '../components/muiComponents/loggerTable/LoggerTable';
 import PartsUsedLoggerTable from '../components/muiComponents/loggerTable/LoggerTable';
-
 import { getSession, signIn, useSession } from 'next-auth/react';
-import Box from '@mui/material/Box';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import '../styles/Home.module.css';
-import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
 
 export default function Logger() {
   console.log('Logger page rendered');
