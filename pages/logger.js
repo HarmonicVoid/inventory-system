@@ -8,22 +8,20 @@ export default function Logger() {
   console.log('Logger page rendered');
 
   return (
-    <>
-      <div className="App">
-        <Tabs className="Tabs">
-          <TabList>
-            <Tab>New Parts Added</Tab>
-            <Tab>Parts Used</Tab>
-          </TabList>
-          <TabPanel>
-            <PartsAddedLoggerTable data={[]} />
-          </TabPanel>
-          <TabPanel>
-            <PartsUsedLoggerTable data={[]} />
-          </TabPanel>
-        </Tabs>
-      </div>
-    </>
+    <div className="App">
+      <Tabs className="Tabs">
+        <TabList>
+          <Tab>New Parts Added</Tab>
+          <Tab>Parts Used</Tab>
+        </TabList>
+        <TabPanel>
+          <PartsAddedLoggerTable data={[]} />
+        </TabPanel>
+        <TabPanel>
+          <PartsUsedLoggerTable data={[]} />
+        </TabPanel>
+      </Tabs>
+    </div>
   );
 }
 
