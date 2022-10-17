@@ -84,7 +84,7 @@ function SignIn({ providers }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const providers = await getProviders();
 
   return {
