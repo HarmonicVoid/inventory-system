@@ -6,33 +6,37 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 export default function Logger() {
   console.log('Logger page rendered');
+  const { data: session, status } = useSession();
 
-  return (
-    <div className="App">
-      <Tabs className="Tabs">
-        <TabList>
-          <Tab>New Parts Added</Tab>
-          <Tab>Parts Used</Tab>
-        </TabList>
-        <TabPanel>
-          <PartsAddedLoggerTable data={[]} />
-        </TabPanel>
-        <TabPanel>
-          <PartsUsedLoggerTable data={[]} />
-        </TabPanel>
-      </Tabs>
-    </div>
-  );
+  if (status === 'authenticated') {
+    return (
+      <div className="App">
+        <Tabs className="Tabs">
+          <TabList>
+            <Tab>New Parts Added</Tab>
+            <Tab>Parts Used</Tab>
+          </TabList>
+          <TabPanel>
+            <PartsAddedLoggerTable data={[]} />
+          </TabPanel>
+          <TabPanel>
+            <PartsUsedLoggerTable data={[]} />
+          </TabPanel>
+        </Tabs>
+      </div>
+    );
+  }
+
+  return signIn();
 }
 
 export async function getServerSideProps(context) {
-  //console.log(context);
   const session = await getSession(context);
 
   if (!session) {
     return {
       redirect: {
-        destination: '/signin',
+        destination: '/',
         permanent: false,
       },
     };

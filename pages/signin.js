@@ -2,7 +2,6 @@ import React from 'react';
 import {
   getProviders,
   useSession,
-  getSession,
   signIn as SignIntoProvider,
 } from 'next-auth/react';
 import { Button, Card, CardContent, Typography } from '@mui/material';
@@ -60,7 +59,13 @@ function SignIn({ providers }) {
                       <Button
                         variant="contained"
                         onClick={() =>
-                          SignIntoProvider(provider.id, { callbackUrl: '/' })
+                          SignIntoProvider(provider.id, {
+                            callbackUrl: `${
+                              router.query.callbackUrl
+                                ? router.query.callbackUrl
+                                : window.location.origin
+                            }`,
+                          })
                         }
                       >
                         Sign in
