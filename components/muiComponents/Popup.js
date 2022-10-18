@@ -6,17 +6,13 @@ import CloseIcon from '@mui/icons-material/Close';
 export default function Popup(props) {
   const { title, children, openPopup, setOpenPopup } = props;
   return (
-    <Dialog
-      open={openPopup}
-      sx={{ '&.MuiDialog-paper': { padding: '30px' } }}
-      maxWidth="lg"
-    >
+    <Dialog open={openPopup}>
       <DialogTitle>
         <div style={{ display: 'flex' }}>
           <Typography
-            variant="h5"
+            variant="h6"
             component="div"
-            sx={{ flexGrow: 1, fontWeight: 'bold', marginRight: 2 }}
+            sx={{ flexGrow: 1, fontWeight: 'bold' }}
           >
             {title}
           </Typography>

@@ -21,6 +21,8 @@ import HandymanIcon from '@mui/icons-material/Handyman';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import HistoryIcon from '@mui/icons-material/History';
 import { signOut, useSession } from 'next-auth/react';
+import Popup from './Popup';
+import UsePart from '../UsePart';
 
 const pages = ['Part History'];
 
@@ -69,11 +71,11 @@ const ResponsiveAppBar = () => {
   const { data: session, status } = useSession();
 
   const [modelSearchQuery, setModelSearchQuery] = useRecoilState(modelState);
-
-  const router = useRouter();
-
+  const [openUsePopup, setOpenUsePopup] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const router = useRouter();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -98,195 +100,204 @@ const ResponsiveAppBar = () => {
 
   if (status === 'authenticated') {
     return (
-      <AppBar sx={{ backgroundColor: '#272727' }} position="sticky">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{
-                fontSize: '1.7rem',
-                mr: 3,
-                display: { xs: 'none', md: 'flex' },
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                if (routePath == '/') {
-                } else {
-                  router.push('/');
-                }
-              }}
-            >
-              Consignment
-            </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+      <>
+        <AppBar sx={{ backgroundColor: '#272727' }} position="sticky">
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
                 sx={{
-                  display: { xs: 'block', md: 'none' },
+                  fontSize: '1.7rem',
+                  mr: 3,
+                  display: { xs: 'none', md: 'flex' },
+                  cursor: 'pointer',
                 }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Tooltip title="Add Part">
-                <Button
-                  sx={{
-                    color: 'white',
-                    display: 'block',
-                    '&:hover': { backgroundColor: '#455A64' },
-                  }}
-                  onClick={() => {
-                    if (routePath == '/addpart') {
-                    } else {
-                      router.push('/addpart');
-                    }
-                  }}
-                >
-                  <LibraryAddIcon
-                    sx={{
-                      color: 'white',
-                      '&:hover': {
-                        color: 'white',
-                      },
-                      fontSize: '1.8rem',
-                    }}
-                  />
-                </Button>
-              </Tooltip>
-
-              <Tooltip title="Part history">
-                <Button
-                  sx={{
-                    color: 'white',
-                    display: 'block',
-                    '&:hover': { backgroundColor: '#455A64' },
-                  }}
-                  onClick={() => {
-                    if (routePath == '/logger') {
-                    } else {
-                      router.push('/logger');
-                    }
-                  }}
-                >
-                  <HistoryIcon
-                    sx={{
-                      color: 'white',
-                      '&:hover': {
-                        color: 'white',
-                      },
-                      fontSize: '2rem',
-                    }}
-                  />
-                </Button>
-              </Tooltip>
-
-              <Tooltip title="Use Part">
-                <Button
-                  disableRipple
-                  onClick={() => {
-                    setOpenUsePopup(true);
-                  }}
-                  sx={{
-                    color: 'white',
-                    display: 'block',
-                    '&:hover': { backgroundColor: '#455A64' },
-                  }}
-                >
-                  <HandymanIcon
-                    sx={{
-                      color: 'white',
-                      '&:hover': {
-                        color: 'white',
-                      },
-                      fontSize: '1.8rem',
-                    }}
-                  />
-                </Button>
-              </Tooltip>
-            </Box>
-
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-
-              <StyledInputBase
-                placeholder="Search Model..."
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={(e) => setModelSearchQuery(e.target.value)}
-                onBlur={blurHandler}
-                onKeyPress={(e) => {
-                  if (e.code === 'Enter') {
-                    if (routePath == '/') {
-                    } else {
-                      router.push('/');
-                    }
+                onClick={() => {
+                  if (routePath == '/') {
+                  } else {
+                    router.push('/');
                   }
                 }}
-              />
-            </Search>
-
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={session.user.name} src={session.user.image} />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={signOut}>
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+                Consignment
+              </Typography>
+
+              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: 'block', md: 'none' },
+                  }}
+                >
+                  {pages.map((page) => (
+                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Tooltip title="Add Part">
+                  <Button
+                    sx={{
+                      color: 'white',
+                      display: 'block',
+                      '&:hover': { backgroundColor: '#455A64' },
+                    }}
+                    onClick={() => {
+                      if (routePath == '/addpart') {
+                      } else {
+                        router.push('/addpart');
+                      }
+                    }}
+                  >
+                    <LibraryAddIcon
+                      sx={{
+                        color: 'white',
+                        '&:hover': {
+                          color: 'white',
+                        },
+                        fontSize: '1.8rem',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Part history">
+                  <Button
+                    sx={{
+                      color: 'white',
+                      display: 'block',
+                      '&:hover': { backgroundColor: '#455A64' },
+                    }}
+                    onClick={() => {
+                      if (routePath == '/logger') {
+                      } else {
+                        router.push('/logger');
+                      }
+                    }}
+                  >
+                    <HistoryIcon
+                      sx={{
+                        color: 'white',
+                        '&:hover': {
+                          color: 'white',
+                        },
+                        fontSize: '2rem',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Use Part">
+                  <Button
+                    disableRipple
+                    onClick={() => {
+                      setOpenUsePopup(true);
+                    }}
+                    sx={{
+                      color: 'white',
+                      display: 'block',
+                      '&:hover': { backgroundColor: '#455A64' },
+                    }}
+                  >
+                    <HandymanIcon
+                      sx={{
+                        color: 'white',
+                        '&:hover': {
+                          color: 'white',
+                        },
+                        fontSize: '1.8rem',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Box>
+
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+
+                <StyledInputBase
+                  placeholder="Search Model..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  onChange={(e) => setModelSearchQuery(e.target.value)}
+                  onBlur={blurHandler}
+                  onKeyPress={(e) => {
+                    if (e.code === 'Enter') {
+                      if (routePath == '/') {
+                      } else {
+                        router.push('/');
+                      }
+                    }
+                  }}
+                />
+              </Search>
+
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt={session.user.name} src={session.user.image} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={signOut}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+        <Popup
+          title="Use Part"
+          openPopup={openUsePopup}
+          setOpenPopup={setOpenUsePopup}
+        >
+          <UsePart />
+        </Popup>
+      </>
     );
   }
 };
