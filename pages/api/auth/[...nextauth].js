@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { FirestoreAdapter } from '@next-auth/firebase-adapter';
 import { signIn, signOut } from 'next-auth/react';
 
 export default NextAuth({
@@ -16,15 +15,6 @@ export default NextAuth({
     secret: process.env.JWT_SECRET,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  // adapter: FirestoreAdapter({
-  //   apiKey: process.env.API_KEY,
-  //   appId: process.env.APP_ID,
-  //   authDomain: process.env.AUTH_DOMAIN,
-  //   databaseURL: process.env.FIREBASE_DATABASE_URL,
-  //   projectId: process.env.PROJECT_ID,
-  //   storageBucket: process.env.STORAGE_BUCKET,
-  //   messagingSenderId: process.env.MESSAGE_SENDER_ID,
-  // }),
   pages: {
     signIn: '/signin',
   },
