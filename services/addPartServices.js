@@ -44,10 +44,10 @@ export async function CheckModelInDb(data) {
   return modelData;
 }
 
-export async function CheckPartNumber(data) {
+export async function CheckPartNumber(partNumberValue) {
   const partNumberDocRef = query(
     collectionGroup(db, 'Parts'),
-    where('partNumber', '==', data)
+    where('partNumber', '==', partNumberValue)
   );
   const queryPartNumber = await getDocs(partNumberDocRef);
 
@@ -57,6 +57,30 @@ export async function CheckPartNumber(data) {
   }));
 
   return partNumberData;
+}
+
+export async function CheckPartName(modelSelected, partName) {
+  const partNameQuery = query(
+    collection(db, 'iPhone Models', modelSelected, 'Parts'),
+    where('partName', '==', partName)
+  );
+
+  const queryPartName = await getDocs(partNameQuery);
+  const partNameData = queryPartName.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return partNameData;
+}
+
+export async function CheckSharedPartStatus(modelId, partNumberId) {
+  const docSharedRef = doc(db, 'iPhone Models', modelId, 'Parts', partNumberId);
+  const docShared = await getDoc(docSharedRef);
+
+  const partData = docShared.data();
+
+  return partData.sharedPartNumber;
 }
 
 export async function CreateNewModel(modelSelected) {

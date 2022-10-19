@@ -888,7 +888,6 @@ function PartForm() {
       UploadMultipleModelsParts();
     } else if (modelSelection.length == 1 && serialData.length <= 0) {
       isOnlyOne = true;
-      modelDb = await partService.CheckModelInDb(modelSelection[0]);
     } else {
       setNotify({
         isOpen: true,
@@ -899,8 +898,12 @@ function PartForm() {
       setLoading(false);
     }
 
-    //iPhone model does not exist
+    //Checking DB for model and storing in variable
+    modelDb = await partService.CheckModelInDb(modelSelection[0]);
+    console.log(modelDb);
+
     if (modelDb.length == 0 && isOnlyOne == true) {
+      //iPhone model does not exist
       //Checking to see if part number is in db
       const partNumberData = await partService.CheckPartNumber(
         values.partNumber
@@ -949,44 +952,70 @@ function PartForm() {
         //setModelSelection([]);
         setLoading(false);
       }
-
-      // resetForm();
-      // setLoading(false);
     } else if (modelDb.length != 0 && isOnlyOne == true) {
-      console.log('iPhone model is in DB');
-      console.log(modelDb);
-      // modelInDb = true;
-      partQuery = query(
-        collection(db, 'iPhone Models', modelDb[0].id, 'Parts'),
-        where('partName', '==', values.partId)
+      //iPhone model is in DB
+
+      const partNameData = await partService.CheckPartName(
+        modelDb[0].id,
+        values.partId
       );
 
-      queryPartSnapshot = await getDocs(partQuery);
-      partNumberData = queryPartSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      console.log(partNumberData);
-
       if (
-        partNumberData.length != 0 &&
-        partNumberData[0].partName == values.partId
+        partNameData.length != 0 &&
+        partNameData[0].partName == values.partId
       ) {
-        console.log('TRUE : part selected is in DB');
-        partNameFoundInDb = true;
-      } else {
-        console.log('FALSE : part selected is NOT in DB');
-        partNameFoundInDb = false;
-      }
+        //Part name selected exists in DB
 
-      if (partNameFoundInDb == true) {
-        console.log('Part number: ' + partNumberData[0].partNumber);
+        //Checks to see if part number entered matches with part number in DB
+        if (partNameData[0].partNumber == values.partNumber) {
+          //Part number entered matches with DB
 
-        if (partNumberData[0].partNumber == values.partNumber) {
-          console.log('Part number entered matches with db');
+          const partSharedStatus = await partService.CheckSharedPartStatus(
+            modelDb[0].id,
+            partNameData[0].id
+          );
 
-          partNumberMatchesInput = true;
+          if (partSharedStatus == true) {
+            console.log('Part ' + values.partId + ' is being shared');
+
+            setNotify({
+              isOpen: true,
+              message:
+                modelSelection[0] +
+                ' is already sharing the part ' +
+                values.partId,
+              type: 'error',
+            });
+
+            setLoading(false);
+          } else {
+            console.log(
+              'Adds a new serial# of a part# that already exists in the database.'
+            );
+
+            await partService.AddSerial(
+              modelDb[0].id,
+              partNameData[0].id,
+              values.deliveryNumber,
+              session.user.name,
+              values.serialNumber,
+              values.partId,
+              values.partNumber,
+              [modelSelection[0]]
+            );
+
+            await partService.UpdateStock(modelDb[0].id, partNameData[0].id);
+
+            setNotify({
+              isOpen: true,
+              message: 'Added successfully',
+              type: 'success',
+            });
+
+            // setModelSelection([]);
+            // resetForm();
+            setLoading(false);
+          }
         } else {
           setNotify({
             isOpen: true,
@@ -994,28 +1023,15 @@ function PartForm() {
             type: 'error',
           });
 
-          partNumberMatchesInput = false;
           setLoading(false);
         }
-      } else if (partNameFoundInDb == false) {
-        console.log('Part Name NOT in db');
-        console.log('Creating new part');
+      } else {
+        console.log('FALSE : part selected is NOT in DB');
+        //Part name does not exist in DB
 
-        //Looking for duplicate part#'s
-        const partNumberQuery = query(
-          collectionGroup(db, 'Serial Numbers'),
-          where('partNumber', '==', values.partNumber)
+        const partNumberData = await partService.CheckPartNumber(
+          values.partNumber
         );
-        const queryPartNumbers = await getDocs(partNumberQuery);
-
-        const partNumberData = queryPartNumbers.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        console.log('Part number in DB?');
-
-        console.log(partNumberData);
 
         if (partNumberData.length != 0) {
           setNotify({
@@ -1029,74 +1045,25 @@ function PartForm() {
             'Adds a new part with a new part# to a model that already exists in the database'
           );
 
-          const newPartDocRef = await addDoc(
-            collection(db, 'iPhone Models', modelDb[0].id, 'Parts'),
-            {
-              partName: values.partId,
-              partNumber: values.partNumber,
-              model: [modelSelection[0]],
-              stock: 0,
-              reserved: 0,
-              available: 0,
-              sharedPartNumber: false,
-            }
+          const newPartDocRef = await partService.CreateNewPart(
+            values.partId,
+            values.partNumber,
+            [modelSelection[0]],
+            modelDb[0].id
           );
 
-          await addDoc(
-            collection(
-              db,
-              'iPhone Models',
-              modelDb[0].id,
-              'Parts',
-              newPartDocRef.id,
-              'Serial Numbers'
-            ),
-            {
-              timestamp: serverTimestamp(),
-              deliveryNumber: values.deliveryNumber,
-              user: session.user.name,
-              serialNumber: values.serialNumber,
-              partName: values.partId,
-              partNumber: values.partNumber,
-              model: [modelSelection[0]],
-            }
+          await partService.AddSerial(
+            modelDb[0].id,
+            newPartDocRef.id,
+            values.deliveryNumber,
+            session.user.name,
+            values.serialNumber,
+            values.partId,
+            values.partNumber,
+            [modelSelection[0]]
           );
 
-          //logger
-
-          await addDoc(collection(db, 'Parts Added Logger'), {
-            timestamp: serverTimestamp(),
-            deliveryNumber: values.deliveryNumber,
-            addedBy: session.user.name,
-            serialNumber: values.serialNumber,
-            partName: values.partId,
-            partNumber: values.partNumber,
-            model: [modelSelection[0]],
-          });
-
-          //getting stock
-
-          const subCollectionSnapshot = await getDocs(
-            collection(
-              db,
-              'iPhone Models',
-              modelDb[0].id,
-              'Parts',
-              newPartDocRef.id,
-              'Serial Numbers'
-            )
-          );
-          subCollectionSnapshot.forEach((docs) => {
-            stockArray.push(docs.data());
-          });
-
-          await updateDoc(
-            doc(db, 'iPhone Models', modelDb[0].id, 'Parts', newPartDocRef.id),
-            {
-              stock: stockArray.length,
-              available: stockArray.length,
-            }
-          );
+          await partService.UpdateStock(modelDb[0].id, newPartDocRef.id);
 
           setNotify({
             isOpen: true,
@@ -1108,114 +1075,6 @@ function PartForm() {
           //resetForm();
           setLoading(false);
         }
-      }
-    }
-
-    if (partNumberMatchesInput == true) {
-      const docSharedRef = doc(
-        db,
-        'iPhone Models',
-        modelDb[0].id,
-        'Parts',
-        partNumberData[0].id
-      );
-      const docSharedSnap = await getDoc(docSharedRef);
-
-      const partNameInDb = docSharedSnap.data();
-
-      if (partNameInDb.sharedPartNumber == true) {
-        console.log('Part ' + values.partId + ' is being shared');
-
-        setNotify({
-          isOpen: true,
-          message:
-            modelSelection[0] + ' is already sharing the part ' + values.partId,
-          type: 'error',
-        });
-
-        setLoading(false);
-      } else {
-        //**************** Adds a new part to a model that already has the part number in the database ****************
-
-        console.log('Not shared parts');
-
-        console.log(
-          'Adds a new serial# of a part# that already exists in the database.'
-        );
-
-        await addDoc(
-          collection(
-            db,
-            'iPhone Models',
-            modelDb[0].id,
-            'Parts',
-            partNumberData[0].id,
-            'Serial Numbers'
-          ),
-          {
-            timestamp: serverTimestamp(),
-            deliveryNumber: values.deliveryNumber,
-            user: session.user.name,
-            serialNumber: values.serialNumber,
-            partName: values.partId,
-            partNumber: values.partNumber,
-            model: [modelSelection[0]],
-          }
-        );
-
-        //logger
-
-        await addDoc(collection(db, 'Parts Added Logger'), {
-          timestamp: serverTimestamp(),
-          deliveryNumber: values.deliveryNumber,
-          addedBy: session.user.name,
-          serialNumber: values.serialNumber,
-          partName: values.partId,
-          partNumber: values.partNumber,
-          model: [modelSelection[0]],
-        });
-
-        //getting stock
-
-        const subCollectionSnapshot = await getDocs(
-          collection(
-            db,
-            'iPhone Models',
-            modelDb[0].id,
-            'Parts',
-            partNumberData[0].id,
-            'Serial Numbers'
-          )
-        );
-        subCollectionSnapshot.forEach((docs) => {
-          stockArray.push(docs.data());
-        });
-
-        await updateDoc(
-          doc(
-            db,
-            'iPhone Models',
-            modelDb[0].id,
-            'Parts',
-            partNumberData[0].id
-          ),
-          {
-            stock: stockArray.length,
-            available: stockArray.length,
-          }
-        );
-
-        //complete
-
-        setNotify({
-          isOpen: true,
-          message: 'Added successfully',
-          type: 'success',
-        });
-
-        // setModelSelection([]);
-        // resetForm();
-        setLoading(false);
       }
     }
   };
