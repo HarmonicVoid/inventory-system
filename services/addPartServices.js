@@ -97,6 +97,12 @@ export async function CreateNewPart(
   modelSelected,
   modelId
 ) {
+  let sharedValue = false;
+
+  if (modelSelected.length >= 2) {
+    sharedValue = true;
+  }
+
   const partDocRef = await addDoc(
     collection(db, 'iPhone Models', modelId, 'Parts'),
     {
@@ -106,7 +112,7 @@ export async function CreateNewPart(
       stock: 0,
       reserved: 0,
       available: 0,
-      sharedPartNumber: false,
+      sharedPartNumber: sharedValue,
     }
   );
 
