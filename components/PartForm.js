@@ -15,7 +15,6 @@ import TextInput from './muiComponents/TextInput';
 import Popup from './muiComponents/Popup';
 import { useSession } from 'next-auth/react';
 import Button from '@mui/material/Button';
-import { useRouter } from 'next/router';
 import Notifications from './muiComponents/Notification';
 import * as partService from '../services/addPartServices';
 
@@ -55,8 +54,6 @@ function PartForm() {
     );
   };
 
-  const router = useRouter();
-
   const { values, setValues, handleInputChange, resetForm, errors, setErrors } =
     InputChange(initialValues);
 
@@ -68,7 +65,7 @@ function PartForm() {
         })
       );
     });
-  }, []);
+  }, [openModelsPopup]);
 
   useEffect(() => {
     onSnapshot(query(collection(db, 'partsSelection')), (snapshot) => {
@@ -78,7 +75,7 @@ function PartForm() {
         })
       );
     });
-  }, []);
+  }, [openUsePopup]);
 
   const addModelName = async () => {
     if (loading) return;
@@ -116,8 +113,6 @@ function PartForm() {
     setLoading(false);
     setOpenUsePopup(false);
   };
-
-  //Multi Model----------------------------------------------------
 
   const UploadMultipleModelsParts = async () => {
     const partNameDataModel1 = [];
@@ -382,136 +377,6 @@ function PartForm() {
         setLoading(false);
       }
     }
-
-    // // This will give an array of the model 1's parts to confirm if model is in DB
-
-    // model1 = await partService.CheckModelInDb(modelSelection[0]);
-
-    // if (model1.length == 0) {
-    //   console.log('iPhone model does not exist');
-    //   model1InDb = false;
-    // } else if (model1.length != 0) {
-    //   //iPhone model1 is in DB
-
-    //   const partNameDataModel1 = await partService.CheckPartName(
-    //     model1[0].id,
-    //     values.partId
-    //   );
-
-    //   if (partNameDataModel1.length <= 0) {
-    //     model1PartNameExist = false;
-    //     console.log('Part does not exist: ' + model1PartNameExist);
-    //   } else {
-    //     if (partNameDataModel1[0].sharedPartNumber == false) {
-    //       setNotify({
-    //         isOpen: true,
-    //         message:
-    //           modelSelection[0] +
-    //           ' already has the ' +
-    //           values.partId +
-    //           ' as a single part, not shared ',
-    //         type: 'error',
-    //       });
-    //       singlePartModel1 = true;
-    //       setLoading(false);
-    //     } else if (values.partNumber != partNameDataModel1[0].partNumber) {
-    //       setNotify({
-    //         isOpen: true,
-    //         message: 'Part number does not match',
-    //         type: 'error',
-    //       });
-    //       setLoading(false);
-    //     } else if (values.partNumber == partNameDataModel1[0].partNumber) {
-    //       //adding serial for model1 part
-    //       await partService.AddSerial(
-    //         model1[0].id,
-    //         partNameDataModel1[0].id,
-    //         values.deliveryNumber,
-    //         session.user.name,
-    //         values.serialNumber,
-    //         values.partId,
-    //         values.partNumber,
-    //         [modelSelection[0], modelSelection[1]]
-    //       );
-
-    //       //Updating stock for model 1
-    //       await partService.UpdateStock(model1[0].id, partNameDataModel1[0].id);
-
-    //       setNotify({
-    //         isOpen: true,
-    //         message: 'Shared parts added successfully',
-    //         type: 'success',
-    //       });
-
-    //       setLoading(false);
-    //     }
-    //   }
-    // }
-
-    // // This will give an array of the model 2's parts to confirm if model is in DB
-
-    // model2 = await partService.CheckModelInDb(modelSelection[1]);
-
-    // if (model2.length == 0) {
-    //   console.log('iPhone model does not exist');
-    //   model2InDb = false;
-    // } else if (model2.length != 0) {
-    //   //iPhone model2 is in DB
-
-    //   const partNameDataModel2 = await partService.CheckPartName(
-    //     model2[0].id,
-    //     values.partId
-    //   );
-
-    //   if (partNameDataModel2.length <= 0) {
-    //     model2PartNameExist = false;
-    //     console.log('Part does not exist: ' + model1PartNameExist);
-    //   } else {
-    //     if (partNameDataModel2[0].sharedPartNumber == false) {
-    //       setNotify({
-    //         isOpen: true,
-    //         message:
-    //           modelSelection[1] +
-    //           ' already has the ' +
-    //           values.partId +
-    //           ' as a single part, not shared ',
-    //         type: 'error',
-    //       });
-    //       singlePartModel1 = true;
-    //       setLoading(false);
-    //     } else if (values.partNumber != partNameDataModel2[0].partNumber) {
-    //       setNotify({
-    //         isOpen: true,
-    //         message: 'Part number does not match',
-    //         type: 'error',
-    //       });
-    //       setLoading(false);
-    //     } else if (values.partNumber == partNameDataModel2[0].partNumber) {
-    //       //adding serial for model 2 part
-    //       await partService.AddSerial(
-    //         model2[0].id,
-    //         partNameDataModel2[0].id,
-    //         values.deliveryNumber,
-    //         session.user.name,
-    //         values.serialNumber,
-    //         values.partId,
-    //         values.partNumber,
-    //         [modelSelection[0], modelSelection[1]]
-    //       );
-
-    //       //Updating stock for model 2
-    //       await partService.UpdateStock(model2[0].id, partNameDataModel2[0].id);
-
-    //       setNotify({
-    //         isOpen: true,
-    //         message: 'Shared parts added successfully',
-    //         type: 'success',
-    //       });
-
-    //       setLoading(false);
-    //     }
-    //   }
-    // }
   };
 
   const AddPart = async () => {
@@ -891,18 +756,8 @@ function PartForm() {
                   sx={{ width: '100%' }}
                   label="Delivery Number"
                   inputProps={{ style: { textTransform: 'uppercase' } }}
-                  // error={values.deliveryNumber === ''}
-
                   error={errors.deliveryNumber}
                 />
-                {/* <TextInput
-                  sx={{ width: '100%' }}
-                  label="Delivery Number"
-                  value={nValues.deliveryNumber}
-                  name="deliveryNumber"
-                  inputProps={{ style: { textTransform: 'uppercase' } }}
-                  onChange={nOnChange}
-                /> */}
               </Box>
 
               <Box
