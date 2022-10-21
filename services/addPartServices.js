@@ -113,6 +113,7 @@ export async function CreateNewPart(
       reserved: 0,
       available: 0,
       sharedPartNumber: sharedValue,
+      modelId: modelId,
     }
   );
 
@@ -155,8 +156,9 @@ export async function AddSerial(
   });
 }
 
-export async function UpdateStock(modelId, partId) {
+export async function UpdateStock(modelId, partId, partNumber) {
   const stock = [];
+  const partsData = await CheckPartNumber(partNumber);
 
   const subCollectionSnapshot = await getDocs(
     collection(db, 'iPhone Models', modelId, 'Parts', partId, 'Serial Numbers')
@@ -167,6 +169,6 @@ export async function UpdateStock(modelId, partId) {
 
   await updateDoc(doc(db, 'iPhone Models', modelId, 'Parts', partId), {
     stock: stock.length,
-    available: stock.length,
+    available: stock.length - partsData[0].reserved,
   });
 }
