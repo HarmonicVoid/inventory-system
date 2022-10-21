@@ -358,13 +358,9 @@ function InventoryTable({ model, depend }) {
                     align="center"
                   >
                     <Counter
-                      shelfValue={item.stock}
-                      reservedValue={item.reserved}
                       modelId={model[0]}
                       partId={item.id}
-                      shared={item.sharedPartNumber}
-                      partNumber={item.partNumber}
-                      modelNameShared={item.model}
+                      partData={item}
                     />
                   </TableCell>
 
@@ -377,7 +373,7 @@ function InventoryTable({ model, depend }) {
                     }}
                     align="center"
                   >
-                    {item.available - item.reserved}
+                    {item.available}
                   </TableCell>
                 </TableRow>
               ))}
