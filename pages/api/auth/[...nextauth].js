@@ -19,22 +19,16 @@ export default NextAuth({
     signIn: '/signin',
   },
 
-  // callbacks: {
-  //   async session({ session, token, user }) {
-  //     session.user.username = session.user.name
-  //       .split(' ')
-  //       .join('')
-  //       .toLocaleLowerCase();
-  //     session.userId = user.id;
-
-  //     // session.user.uid = token;
-  //     return session;
-  //   },
-  //   async signIn({ account, profile }) {
-  //     if (account.provider === 'google') {
-  //       return profile.email.endsWith('@computercare.net');
-  //     }
-  //     return true; // Do different verification for other providers that don't have `email_verified`
-  //   },
-  // },
+  callbacks: {
+    async signIn({ account, profile }) {
+      if (account.provider === 'google') {
+        return (
+          (profile.email_verified &&
+            profile.email.endsWith('@computercare.net')) ||
+          profile.email == 'ccguest3350@gmail.com'
+        );
+      }
+      return true; // Do different verification for other providers that don't have `email_verified`
+    },
+  },
 });
