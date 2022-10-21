@@ -23,7 +23,6 @@ import {
 import { db } from '/config/firebase';
 
 const initialValues = {
-  partNumber: '',
   serialNumber: '',
 };
 
@@ -34,18 +33,34 @@ function UsePart() {
     message: '',
     type: 'info',
   });
-  const { values, setValues, handleInputChange, resetForm } =
+  const { values, setValues, handleInputChange, resetForm, errors, setErrors } =
     InputChange(initialValues);
+
+  const RemoveSerial = async () => {
+    console.log('remove serial');
+    //Checking to see if serial exists
+    const serialData = await partService.CheckSerialNumber(values.serialNumber);
+    console.log(serialData);
+  };
+
+  const validate = () => {
+    let temp = {};
+    temp.serialNumber =
+      values.serialNumber.length > 9 ? '' : 'This field is required';
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x == '');
+  };
 
   const Submit = (event) => {
     event.preventDefault();
-    // if (validate()) {
-    //   console.log('true');
-    //   AddPart();
-    // } else {
-    //   const test = validate();
-    //   console.log(test);
-    // }
+    if (validate()) {
+      RemoveSerial();
+    } else {
+      const test = validate();
+      console.log(test);
+    }
   };
   return (
     <>
@@ -54,41 +69,22 @@ function UsePart() {
         direction="row"
         justifyContent="center"
         alignItems="flex-start"
-        rowSpacing={3}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: 3,
-          }}
-        >
-          {/* <TextInput
-            name="partNumber"
-            value={values.partNumber}
+        <form onSubmit={Submit} autoComplete="off">
+          <TextInput
+            variant="filled"
+            name="serialNumber"
+            value={values.serialNumber}
             onChange={handleInputChange}
-            label="Part Number"
-            sx={{
-              marginRight: 2,
-              width: '100%',
-            }}
-          /> */}
-
-          <form onSubmit={Submit} autoComplete="off">
-            <TextInput
-              variant="filled"
-              name="serialNumber"
-              value={values.serialNumber}
-              onChange={handleInputChange}
-              sx={{ width: '100%' }}
-              label="Serial Number"
-              inputProps={{ style: { textTransform: 'uppercase' } }}
-            />
-            <Button sx={{ marginTop: 1 }} type="submit">
-              {loading ? 'SUBMITTING...' : 'SUBMIT'}
-            </Button>
-          </form>
-        </Box>
+            sx={{ width: '100%' }}
+            label="Serial Number"
+            error={errors.serialNumber}
+            inputProps={{ style: { textTransform: 'uppercase' } }}
+          />
+          <Button sx={{ marginTop: 1 }} type="submit">
+            {loading ? 'SUBMITTING...' : 'SUBMIT'}
+          </Button>
+        </form>
       </Grid>
       <Notifications notify={notify} setNotify={setNotify} />
     </>
