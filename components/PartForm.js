@@ -65,7 +65,7 @@ function PartForm() {
         })
       );
     });
-  }, [openModelsPopup]);
+  }, []);
 
   useEffect(() => {
     onSnapshot(query(collection(db, 'partsSelection')), (snapshot) => {
@@ -75,7 +75,7 @@ function PartForm() {
         })
       );
     });
-  }, [openUsePopup]);
+  }, []);
 
   const addModelName = async () => {
     if (loading) return;
@@ -146,6 +146,7 @@ function PartForm() {
           message: 'Part number already exist',
           type: 'error',
         });
+        setLoading(false);
       } else if (partNumberData.length == 0) {
         //creating new models with new serial and adding serial already in DB
 
@@ -173,7 +174,11 @@ function PartForm() {
             [modelSelection[0], modelSelection[1]]
           );
 
-          await partService.UpdateStock(newModelRef.id, newPartModelDocRef.id);
+          await partService.UpdateStock(
+            newModelRef.id,
+            newPartModelDocRef.id,
+            values.partNumber
+          );
 
           setNotify({
             isOpen: true,
@@ -184,8 +189,6 @@ function PartForm() {
           setLoading(false);
         }
       }
-
-      setLoading(false);
     } else if (
       (model1.length != 0 &&
         model2.length != 0 &&
@@ -240,7 +243,11 @@ function PartForm() {
               [modelSelection[0], modelSelection[1]]
             );
 
-            await partService.UpdateStock(model[0].id, partNameDataMode[0].id);
+            await partService.UpdateStock(
+              model[0].id,
+              partNameDataMode[0].id,
+              values.partNumber
+            );
 
             setNotify({
               isOpen: true,
@@ -280,6 +287,58 @@ function PartForm() {
           type: 'error',
         });
         setLoading(false);
+      }
+    } else if (
+      model1.length != 0 &&
+      model2.length != 0 &&
+      partNameDataModel1.length == 0 &&
+      partNameDataModel2.length == 0
+    ) {
+      const partNumberData = await partService.CheckPartNumber(
+        values.partNumber
+      );
+      if (partNumberData.length >= 1) {
+        setNotify({
+          isOpen: true,
+          message: 'Part number already exist',
+          type: 'error',
+        });
+        setLoading(false);
+      } else if (partNumberData.length == 0) {
+        for (let i = 0; i < modelSelection.length; i++) {
+          const model = await partService.CheckModelInDb(modelSelection[i]);
+          const newPartModelDocRef = await partService.CreateNewPart(
+            values.partId,
+            values.partNumber,
+            [modelSelection[0], modelSelection[1]],
+            model[0].id
+          );
+
+          await partService.AddSerial(
+            model[0].id,
+            newPartModelDocRef.id,
+            values.deliveryNumber,
+            session.user.name,
+            values.serialNumber,
+            values.partId,
+            values.partNumber,
+            [modelSelection[0], modelSelection[1]]
+          );
+
+          await partService.UpdateStock(
+            model[0].id,
+            newPartModelDocRef.id,
+            values.partNumber
+          );
+
+          setNotify({
+            isOpen: true,
+            message: 'Shared parts added successfully',
+            type: 'success',
+          });
+
+          setLoading(false);
+        }
       }
     }
 
@@ -358,7 +417,11 @@ function PartForm() {
             [modelSelection[0], modelSelection[1]]
           );
 
-          await partService.UpdateStock(model[0].id, newPartModelDocRef.id);
+          await partService.UpdateStock(
+            model[0].id,
+            newPartModelDocRef.id,
+            values.partNumber
+          );
 
           setNotify({
             isOpen: true,
@@ -453,7 +516,11 @@ function PartForm() {
           [modelSelection[0]]
         );
 
-        await partService.UpdateStock(newModelDocRef.id, newPartDocRef.id);
+        await partService.UpdateStock(
+          newModelDocRef.id,
+          newPartDocRef.id,
+          values.partNumber
+        );
 
         setNotify({
           isOpen: true,
@@ -516,7 +583,11 @@ function PartForm() {
               [modelSelection[0]]
             );
 
-            await partService.UpdateStock(modelDb[0].id, partNameData[0].id);
+            await partService.UpdateStock(
+              modelDb[0].id,
+              partNameData[0].id,
+              values.partNumber
+            );
 
             setNotify({
               isOpen: true,
@@ -575,7 +646,11 @@ function PartForm() {
             [modelSelection[0]]
           );
 
-          await partService.UpdateStock(modelDb[0].id, newPartDocRef.id);
+          await partService.UpdateStock(
+            modelDb[0].id,
+            newPartDocRef.id,
+            values.partNumber
+          );
 
           setNotify({
             isOpen: true,
