@@ -21,12 +21,11 @@ import * as partService from '../services/addPartServices';
 const initialValues = {
   modelId: '',
   partId: '',
-  modelName: '',
-  partName: '',
   deviceModel: '',
   partNumber: '',
   serialNumber: '',
   deliveryNumber: '',
+  modelName: '',
 };
 
 function PartForm() {
@@ -54,6 +53,18 @@ function PartForm() {
     );
   };
 
+  const [modelName, setModelName] = useState('');
+
+  const handleChange = (e) => {
+    setModelName(e.target.value.toUpperCase());
+  };
+
+  const [partName, setPartName] = useState('');
+
+  const handlePartNameChange = (e) => {
+    setPartName(e.target.value.toUpperCase());
+  };
+
   const { values, setValues, handleInputChange, resetForm, errors, setErrors } =
     InputChange(initialValues);
 
@@ -77,41 +88,59 @@ function PartForm() {
     });
   }, []);
 
-  const addModelName = async () => {
-    if (loading) return;
-    setLoading(true);
-
-    console.log(values.modelName);
-
-    await addDoc(collection(db, 'modelsSelection'), {
-      title: values.modelName.toUpperCase(),
-      timestamp: serverTimestamp(),
-      user: session.user.name,
+  const validateModelPopup = () => {
+    let temp = {};
+    temp.modelName = /^IPHONE [0-9A-Z]{1,5} ?[A-Z0-9]* ?[A-Z]*$/.test(modelName)
+      ? ''
+      : 'Must contain iPhone and model name';
+    setErrors({
+      ...temp,
     });
+    return Object.values(temp).every((x) => x == '');
+  };
 
-    console.log('new model added: ' + values.modelName);
+  const validatePartNamePopup = () => {
+    let temp = {};
+    temp.partName = partName.length > 3 ? '' : 'Must be a valid name';
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x == '');
+  };
 
-    resetForm();
-    setLoading(false);
-    setModelsOpenPopup(false);
+  const addModelName = async () => {
+    setLoading(true);
+    if (validateModelPopup()) {
+      await addDoc(collection(db, 'modelsSelection'), {
+        title: modelName,
+        timestamp: serverTimestamp(),
+        user: session.user.name,
+      });
+
+      setModelName('');
+      setLoading(false);
+      setModelsOpenPopup(false);
+    } else {
+      setLoading(false);
+    }
   };
 
   const addPartName = async () => {
     setLoading(true);
 
-    console.log(values.partName);
+    if (validatePartNamePopup()) {
+      await addDoc(collection(db, 'partsSelection'), {
+        title: partName,
+        timestamp: serverTimestamp(),
+        user: session.user.name,
+      });
 
-    await addDoc(collection(db, 'partsSelection'), {
-      title: values.partName.toUpperCase(),
-      timestamp: serverTimestamp(),
-      user: session.user.name,
-    });
-
-    console.log('new part added: ' + values.partName);
-
-    resetForm();
-    setLoading(false);
-    setOpenUsePopup(false);
+      setPartName('');
+      setLoading(false);
+      setOpenUsePopup(false);
+    } else {
+      setLoading(false);
+    }
   };
 
   const UploadMultipleModelsParts = async () => {
@@ -151,7 +180,6 @@ function PartForm() {
         //creating new models with new serial and adding serial already in DB
 
         for (let i = 0; i < modelSelection.length; i++) {
-          console.log('Loop 2 ran');
           const newModelRef = await partService.CreateNewModel(
             modelSelection[i]
           );
@@ -179,15 +207,16 @@ function PartForm() {
             newPartModelDocRef.id,
             values.partNumber
           );
-
-          setNotify({
-            isOpen: true,
-            message: 'Shared parts added successfully',
-            type: 'success',
-          });
-
-          setLoading(false);
         }
+        setNotify({
+          isOpen: true,
+          message: 'Shared parts added successfully',
+          type: 'success',
+        });
+
+        resetForm();
+        setModelSelection([]);
+        setLoading(false);
       }
     } else if (
       (model1.length != 0 &&
@@ -205,89 +234,6 @@ function PartForm() {
         type: 'error',
       });
       setLoading(false);
-    } else if (
-      model1.length != 0 &&
-      model2.length != 0 &&
-      partNameDataModel1.length != 0 &&
-      partNameDataModel2.length != 0
-    ) {
-      if (
-        partNameDataModel1[0].sharedPartNumber == true &&
-        partNameDataModel2[0].sharedPartNumber == true
-      ) {
-        //Adds one to the part stock for both models
-        for (let i = 0; i < modelSelection.length; i++) {
-          const model = await partService.CheckModelInDb(modelSelection[i]);
-          const partNameDataMode = await partService.CheckPartName(
-            model[0].id,
-            values.partId
-          );
-
-          if (values.partNumber != partNameDataMode[0].partNumber) {
-            setNotify({
-              isOpen: true,
-              message: 'Part number does not match',
-              type: 'error',
-            });
-            setLoading(false);
-          } else if (values.partNumber == partNameDataMode[0].partNumber) {
-            //adding serial for model1 part
-            await partService.AddSerial(
-              model[0].id,
-              partNameDataMode[0].id,
-              values.deliveryNumber,
-              session.user.name,
-              values.serialNumber,
-              values.partId,
-              values.partNumber,
-              [modelSelection[0], modelSelection[1]]
-            );
-
-            await partService.UpdateStock(
-              model[0].id,
-              partNameDataMode[0].id,
-              values.partNumber
-            );
-
-            setNotify({
-              isOpen: true,
-              message: 'Added successfully',
-              type: 'success',
-            });
-
-            setLoading(false);
-          }
-        }
-      } else if (partNameDataModel1[0].sharedPartNumber == false) {
-        setNotify({
-          isOpen: true,
-          message:
-            modelSelection[0] +
-            ' already has ' +
-            values.partId +
-            ' part as a single, not shared.',
-          type: 'error',
-        });
-        setLoading(false);
-      } else if (partNameDataModel2[0].sharedPartNumber == false) {
-        setNotify({
-          isOpen: true,
-          message:
-            modelSelection[1] +
-            ' already has ' +
-            values.partId +
-            ' part as a single, not shared.',
-          type: 'error',
-        });
-        setLoading(false);
-      } else {
-        setNotify({
-          isOpen: true,
-          message: 'Unknown error',
-          type: 'error',
-        });
-        setLoading(false);
-      }
     } else if (
       model1.length != 0 &&
       model2.length != 0 &&
@@ -337,8 +283,99 @@ function PartForm() {
             type: 'success',
           });
 
+          resetForm();
+          setModelSelection([]);
           setLoading(false);
         }
+      }
+    } else if (
+      model1.length != 0 &&
+      model2.length != 0 &&
+      partNameDataModel1.length != 0 &&
+      partNameDataModel2.length != 0
+    ) {
+      if (
+        partNameDataModel1[0].sharedPartNumber == true &&
+        partNameDataModel2[0].sharedPartNumber == true
+      ) {
+        //Adds one to the part stock for both models
+        for (let i = 0; i < modelSelection.length; i++) {
+          const model = await partService.CheckModelInDb(modelSelection[i]);
+          const partNameDataMode = await partService.CheckPartName(
+            model[0].id,
+            values.partId
+          );
+
+          if (values.partNumber != partNameDataMode[0].partNumber) {
+            setNotify({
+              isOpen: true,
+              message: 'Part number does not match',
+              type: 'error',
+            });
+            setLoading(false);
+          } else if (values.partNumber == partNameDataMode[0].partNumber) {
+            //adding serial for model1 part
+            await partService.AddSerial(
+              model[0].id,
+              partNameDataMode[0].id,
+              values.deliveryNumber,
+              session.user.name,
+              values.serialNumber,
+              values.partId,
+              values.partNumber,
+              [modelSelection[0], modelSelection[1]]
+            );
+
+            await partService.UpdateStock(
+              model[0].id,
+              partNameDataMode[0].id,
+              values.partNumber
+            );
+
+            if (i == 1) {
+              if (setLoading != false) {
+                setNotify({
+                  isOpen: true,
+                  message: 'Added successfully!',
+                  type: 'success',
+                });
+
+                resetForm();
+                setModelSelection([]);
+                setLoading(false);
+              }
+            }
+          }
+        }
+      } else if (partNameDataModel1[0].sharedPartNumber == false) {
+        setNotify({
+          isOpen: true,
+          message:
+            modelSelection[0] +
+            ' already has ' +
+            values.partId +
+            ' part as a single, not shared.',
+          type: 'error',
+        });
+        setLoading(false);
+      } else if (partNameDataModel2[0].sharedPartNumber == false) {
+        setNotify({
+          isOpen: true,
+          message:
+            modelSelection[1] +
+            ' already has ' +
+            values.partId +
+            ' part as a single, not shared.',
+          type: 'error',
+        });
+        setLoading(false);
+      } else {
+        setNotify({
+          isOpen: true,
+          message: 'Unknown error',
+          type: 'error',
+        });
+        setLoading(false);
       }
     }
 
@@ -354,7 +391,7 @@ function PartForm() {
     ) {
       setNotify({
         isOpen: true,
-        message: 'Part should not exist with both models',
+        message: 'Part should not exist in both models',
         type: 'error',
       });
       setLoading(false);
@@ -371,8 +408,6 @@ function PartForm() {
       const partNumberData = await partService.CheckPartNumber(
         values.partNumber
       );
-
-      console.log(partNumberData);
 
       if (partNumberData.length != 0) {
         setNotify({
@@ -393,10 +428,7 @@ function PartForm() {
         }
 
         for (let i = 0; i < modelSelection.length; i++) {
-          console.log('Loop 2 ran');
           model = await partService.CheckModelInDb(modelSelection[i]);
-
-          console.log(model);
 
           const newPartModelDocRef = await partService.CreateNewPart(
             values.partId,
@@ -422,15 +454,17 @@ function PartForm() {
             newPartModelDocRef.id,
             values.partNumber
           );
-
-          setNotify({
-            isOpen: true,
-            message: 'Added successfully',
-            type: 'success',
-          });
-
-          setLoading(false);
         }
+
+        setNotify({
+          isOpen: true,
+          message: 'Added successfully',
+          type: 'success',
+        });
+
+        resetForm();
+        setModelSelection([]);
+        setLoading(false);
       } else {
         setNotify({
           isOpen: true,
@@ -446,8 +480,6 @@ function PartForm() {
     let isOnlyOne = null;
     const modelDb = null;
 
-    setLoading(true);
-
     const serialData = await partService.CheckSerialNumber(values.serialNumber);
 
     if (modelSelection.length >= 3) {
@@ -459,8 +491,6 @@ function PartForm() {
 
       setLoading(false);
     } else if (modelSelection.length == 2 && serialData.length <= 0) {
-      console.log('2 models selected');
-
       UploadMultipleModelsParts();
     } else if (modelSelection.length == 1 && serialData.length <= 0) {
       isOnlyOne = true;
@@ -528,7 +558,8 @@ function PartForm() {
           type: 'success',
         });
 
-        //setModelSelection([]);
+        resetForm();
+        setModelSelection([]);
         setLoading(false);
       }
     } else if (modelDb.length != 0 && isOnlyOne == true) {
@@ -555,8 +586,6 @@ function PartForm() {
           );
 
           if (partSharedStatus == true) {
-            console.log('Part ' + values.partId + ' is being shared');
-
             setNotify({
               isOpen: true,
               message:
@@ -568,10 +597,6 @@ function PartForm() {
 
             setLoading(false);
           } else {
-            console.log(
-              'Adds a new serial# of a part# that already exists in the database.'
-            );
-
             await partService.AddSerial(
               modelDb[0].id,
               partNameData[0].id,
@@ -595,8 +620,8 @@ function PartForm() {
               type: 'success',
             });
 
-            // setModelSelection([]);
-            // resetForm();
+            resetForm();
+            setModelSelection([]);
             setLoading(false);
           }
         } else {
@@ -609,7 +634,6 @@ function PartForm() {
           setLoading(false);
         }
       } else {
-        console.log('FALSE : part selected is NOT in DB');
         //Part name does not exist in DB
 
         const partNumberData = await partService.CheckPartNumber(
@@ -624,10 +648,6 @@ function PartForm() {
           });
           setLoading(false);
         } else {
-          console.log(
-            'Adds a new part with a new part# to a model that already exists in the database'
-          );
-
           const newPartDocRef = await partService.CreateNewPart(
             values.partId,
             values.partNumber,
@@ -658,8 +678,8 @@ function PartForm() {
             type: 'success',
           });
 
-          //setModelSelection([]);
-          //resetForm();
+          resetForm();
+          setModelSelection([]);
           setLoading(false);
         }
       }
@@ -670,11 +690,18 @@ function PartForm() {
     let temp = {};
     temp.multiId = modelSelection.length > 0 ? '' : 'This field is required';
     temp.partId = values.partId ? '' : 'This field is required';
-    temp.partNumber = values.partNumber ? '' : 'This field is required';
-    temp.serialNumber =
-      values.serialNumber.length > 9 ? '' : 'This field is required';
+    temp.partNumber = /^\d{3}-\d{5}$/.test(values.partNumber)
+      ? ''
+      : 'Must be a part number';
+    temp.serialNumber = /^[A-Z0-9]{10,17}$/.test(values.serialNumber)
+      ? ''
+      : 'Must be a valid serial number';
     temp.deliveryNumber =
-      values.deliveryNumber.length > 9 ? '' : 'This field is required';
+      /^[0-9]*$/.test(values.deliveryNumber) &&
+      values.deliveryNumber.length == 10
+        ? ''
+        : 'Must be a valid delivery number';
+
     setErrors({
       ...temp,
     });
@@ -682,12 +709,12 @@ function PartForm() {
   };
 
   const Submit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     if (validate()) {
       AddPart();
     } else {
-      const test = validate();
-      console.log(test);
+      setLoading(false);
     }
   };
 
@@ -841,7 +868,11 @@ function PartForm() {
                   marginTop: '20px',
                 }}
               >
-                <Button variant="contained" type="submit">
+                <Button
+                  disabled={loading ? true : false}
+                  variant="contained"
+                  type="submit"
+                >
                   {loading ? 'SUBMITTING...' : 'SUBMIT'}
                 </Button>
               </Box>
@@ -851,32 +882,43 @@ function PartForm() {
       </Card>
 
       <Popup
-        title="Please Enter Part Name"
+        title="Enter Part"
         openPopup={openUsePopup}
         setOpenPopup={setOpenUsePopup}
       >
         <TextInput
           name="partName"
-          value={values.partName}
-          onChange={handleInputChange}
-          sx={{ width: '100%', marginTop: 1, marginBottom: 2 }}
-          label="Part name..."
+          value={partName}
+          onChange={handlePartNameChange}
+          sx={{ width: '100%', marginTop: 1, marginBottom: 1 }}
+          error={errors.partName}
+          label="Name"
+          autoComplete="off"
         />
-        <Button onClick={() => addPartName()}>ADD</Button>
+        <Button disabled={loading ? true : false} onClick={() => addPartName()}>
+          {loading ? 'SUBMITTING...' : 'ADD'}
+        </Button>
       </Popup>
       <Popup
-        title="Please Enter Model Name"
+        title="Enter Model"
         openPopup={openModelsPopup}
         setOpenPopup={setModelsOpenPopup}
       >
         <TextInput
           name="modelName"
-          value={values.modelName}
-          onChange={handleInputChange}
-          sx={{ width: '100%', marginTop: 1, marginBottom: 2 }}
-          label="Model name..."
+          value={modelName}
+          onChange={handleChange}
+          sx={{ width: '100%', marginTop: 1, marginBottom: 1 }}
+          error={errors.modelName}
+          label="Name"
+          autoComplete="off"
         />
-        <Button onClick={() => addModelName()}>ADD</Button>
+        <Button
+          disabled={loading ? true : false}
+          onClick={() => addModelName()}
+        >
+          {loading ? 'SUBMITTING...' : 'ADD'}
+        </Button>
       </Popup>
       <Notifications notify={notify} setNotify={setNotify} />
     </div>

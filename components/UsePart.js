@@ -21,12 +21,16 @@ import {
   where,
 } from '@firebase/firestore';
 import { db } from '/config/firebase';
+import * as partService from '../services/addPartServices';
+import { useSession } from 'next-auth/react';
 
 const initialValues = {
   serialNumber: '',
 };
 
 function UsePart() {
+  const { data: session } = useSession();
+
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -37,10 +41,63 @@ function UsePart() {
     InputChange(initialValues);
 
   const RemoveSerial = async () => {
-    console.log('remove serial');
     //Checking to see if serial exists
-    const serialData = await partService.CheckSerialNumber(values.serialNumber);
+
+    const querySerialNumbers = query(
+      collectionGroup(db, 'Serial Numbers'),
+      where('serialNumber', '==', values.serialNumber)
+    );
+    const serialNumbersDocRef = await getDocs(querySerialNumbers);
+    const serialData = serialNumbersDocRef.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
     console.log(serialData);
+
+    if (serialData.length == 0) {
+      setNotify({
+        isOpen: true,
+        message: 'Serial not found',
+        type: 'error',
+      });
+      setLoading(false);
+    } else if (serialData.length == 1) {
+      await partService.RemoveSerialNumber(
+        serialData,
+        session.user.name,
+        serialNumbersDocRef
+      );
+
+      setNotify({
+        isOpen: true,
+        message: 'Part utilized successfully',
+        type: 'success',
+      });
+      resetForm();
+      setLoading(false);
+    } else if (serialData.length == 2) {
+      await partService.RemoveSerialNumber(
+        serialData,
+        session.user.name,
+        serialNumbersDocRef
+      );
+
+      setNotify({
+        isOpen: true,
+        message: 'Part utilized successfully',
+        type: 'success',
+      });
+      resetForm();
+      setLoading(false);
+    } else {
+      setNotify({
+        isOpen: true,
+        message: 'Unknown error',
+        type: 'error',
+      });
+      setLoading(false);
+    }
   };
 
   const validate = () => {
@@ -50,16 +107,17 @@ function UsePart() {
     setErrors({
       ...temp,
     });
+    console.log(temp);
     return Object.values(temp).every((x) => x == '');
   };
 
   const Submit = (event) => {
+    setLoading(true);
     event.preventDefault();
     if (validate()) {
       RemoveSerial();
     } else {
-      const test = validate();
-      console.log(test);
+      setLoading(false);
     }
   };
   return (
@@ -81,7 +139,11 @@ function UsePart() {
             error={errors.serialNumber}
             inputProps={{ style: { textTransform: 'uppercase' } }}
           />
-          <Button sx={{ marginTop: 1 }} type="submit">
+          <Button
+            disabled={loading ? true : false}
+            sx={{ marginTop: 1 }}
+            type="submit"
+          >
             {loading ? 'SUBMITTING...' : 'SUBMIT'}
           </Button>
         </form>

@@ -140,6 +140,7 @@ export async function AddSerial(
       partName: partName,
       partNumber: partNumber,
       model: modelSelected,
+      modelId: modelId,
     }
   );
 
@@ -170,5 +171,77 @@ export async function UpdateStock(modelId, partId, partNumber) {
   await updateDoc(doc(db, 'iPhone Models', modelId, 'Parts', partId), {
     stock: stock.length,
     available: stock.length - partsData[0].reserved,
+  });
+}
+
+export async function RemoveSerialNumber(
+  serialData,
+  user,
+  serialNumbersDocRef
+) {
+  for (let i = 0; i < serialData.length; i++) {
+    const stock = [];
+    const partsData = await CheckPartNumber(serialData[i].partNumber);
+    //Updating stock
+    const subCollectionSnapshot = await getDocs(
+      collection(
+        db,
+        'iPhone Models',
+        partsData[i].modelId,
+        'Parts',
+        partsData[i].id,
+        'Serial Numbers'
+      )
+    );
+    subCollectionSnapshot.forEach((docs) => {
+      stock.push(docs.data());
+    });
+
+    if (partsData[i].reserved != 0) {
+      await updateDoc(
+        doc(
+          db,
+          'iPhone Models',
+          partsData[i].modelId,
+          'Parts',
+          partsData[i].id
+        ),
+        {
+          stock: stock.length - 1,
+          reserved: partsData[i].reserved - 1,
+          available: stock.length - partsData[i].reserved,
+        }
+      );
+    } else if (partsData[i].reserved == 0) {
+      await updateDoc(
+        doc(
+          db,
+          'iPhone Models',
+          partsData[i].modelId,
+          'Parts',
+          partsData[i].id
+        ),
+        {
+          stock: stock.length - 1,
+          available: stock.length - 1,
+        }
+      );
+    }
+
+    //logger
+    await addDoc(collection(db, 'Parts Used Logger'), {
+      timestamp: serverTimestamp(),
+      deliveryNumber: serialData[i].deliveryNumber,
+      removedBy: user,
+      serialNumber: serialData[i].serialNumber,
+      partName: partsData[i].partName,
+      partNumber: partsData[i].partNumber,
+      model: partsData[i].model,
+    });
+  }
+
+  //Removing docs that match serial number
+  serialNumbersDocRef.forEach((doc) => {
+    deleteDoc(doc.ref);
   });
 }
