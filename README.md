@@ -1,5 +1,5 @@
 <h1 align="center">Inventory System</h1>
-<h3 align="center">Authorize Users: Sign into the website --> <a target="_blank" href="https://inventory-system-fzihs39ra-harmonicvoid.vercel.app/signin">Access here</a>
+<h3 align="center">Authorize Users: Sign into the website --> <a target="_blank" href="https://inventory-system-fzihs39ra-harmonicvoid.vercel.app/signin">Access here</a> </h3>
 <h2>Create, search, log, and utilize inventory data!</h2>
 <P>This website was created to keep track of iPhone parts inventory and provide stock information more easily. You can add new parts, and the updates will show on the fly. In addition, let's say you are at the front desk in customer service. You can reserve a part for a customer with a click of a button. Behind the scenes, team members working on a phone can efficiently utilize(remove) the part with on-the-fly updates. The system automates the hassle of logging incoming and utilized parts.</p>
 
