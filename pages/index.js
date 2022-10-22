@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { modelState } from '../atoms/modelSearchAtom';
 import { getSession, signIn, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
 import { Box } from '@mui/material';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
   const [modelNames, setModelNames] = useState([]);
   const { data: session, status } = useSession();
 
-  React.useEffect(() => {
+  useEffect(() => {
     return onSnapshot(query(collection(db, 'iPhone Models')), (snapshot) => {
       setModelNames(
         snapshot.docs.map((doc) => {
