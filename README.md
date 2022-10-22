@@ -13,9 +13,9 @@
   <p></p>
   <li> Add single or multiple models that share the same part number into the inventory in one SINGLE FORM. The system design process is well thought out and tackles all possible what-if scenarios.</li>
   <p></p>
-  <li> Performing cycle count has never been easier, know which iPhone parts got utilized from the inventory. When removing a part, the serial number is required, and the system will log it by showing the user signed in and with a timestamp. </li>
+  <li> Performing cycle count has never been easier, know which iPhone parts got utilized from the inventory. When removing a part, the serial number is required, and the system will log it by showing the user signed in and with a timestamp. Stock and if any reservations, updated in seconds. </li>
    <p></p>
-  <li> Search for a specific model and search the parts available for that device. </li>
+  <li> Search for a specific model and search the parts available for that device. Quick access to reserve a part for a customer </li>
 </ul>
 <div>
 
