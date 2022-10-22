@@ -9,7 +9,6 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
-  debug: process.env.NODE_ENV === 'development',
   secret: process.env.AUTH_SECRET,
   jwt: {
     secret: process.env.JWT_SECRET,
@@ -25,7 +24,7 @@ export default NextAuth({
         return (
           (profile.email_verified &&
             profile.email.endsWith('@computercare.net')) ||
-          profile.email == 'ccguest3350@gmail.com'
+          profile.email == 'mb.reach2022@gmail.com'
         );
       }
       return true; // Do different verification for other providers that don't have `email_verified`
