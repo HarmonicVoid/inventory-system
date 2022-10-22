@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   HeaderStyledTableRow,
-  PageContainer,
   Search,
   SearchIconWrapper,
-  StyledClearIcon,
   StyledInputBase,
   StyledTableCell,
   StyledTableRow,
@@ -16,22 +14,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  updateDoc,
-  getDoc,
-  doc,
-  setDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  collectionGroup,
-  getDocs,
-} from '@firebase/firestore';
-import { db } from '../../../config/firebase';
 import { TableHead, Typography } from '@mui/material';
 
 const headCells = [
@@ -64,7 +46,6 @@ export default function MyTable({ data }) {
     return setPartsData(data);
   }, [data]);
 
-  const [records, setRecords] = React.useState(partsData);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -122,7 +103,7 @@ export default function MyTable({ data }) {
   };
 
   return (
-    <Box sx={{ width: '80%', height: '80%' }}>
+    <Box sx={{ width: '100%', height: '80%' }}>
       <Card
         elevation={5}
         sx={{
@@ -171,9 +152,7 @@ export default function MyTable({ data }) {
         elevation={5}
         sx={{
           height: '100%',
-          borderRadius: 0,
           backgroundColor: '#041316',
-          padding: 1,
         }}
       >
         <TableContainer sx={{ height: '100%' }}>
@@ -194,7 +173,7 @@ export default function MyTable({ data }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -221,7 +200,7 @@ export default function MyTable({ data }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -248,7 +227,7 @@ export default function MyTable({ data }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -275,7 +254,7 @@ export default function MyTable({ data }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -302,7 +281,7 @@ export default function MyTable({ data }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -374,15 +353,14 @@ export default function MyTable({ data }) {
                     }}
                     align="center"
                   >
-                    {/* <Box>
+                    <Box>
                       {new Date(
                         item.timestamp.seconds * 1000
                       ).toLocaleDateString('en-US')}
                     </Box>
                     <Box>
                       {item.timestamp.toDate().toLocaleTimeString('en-US')}
-                    </Box> */}
-                    <p>TIME</p>
+                    </Box>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}

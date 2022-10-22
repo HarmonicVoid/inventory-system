@@ -1,6 +1,4 @@
-import Paper from '@mui/material/Paper';
 import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -55,39 +53,11 @@ export const HeaderStyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export const PageContainer = styled(
-  Paper,
-  {}
-)({
-  margin: '20px',
-  width: '80%',
-  backgroundColor: '#041316',
-});
-
 export const TableStyled = styled(
   Table,
   {}
 )({
   backgroundColor: '#1C1C1C',
-});
-
-export const CreateButton = styled(
-  Button,
-  {}
-)({
-  padding: '10px 24px',
-  borderRadius: 5,
-  backgroundColor: '#00695c',
-  color: 'WHITE',
-  position: 'absolute',
-  right: '10px',
-
-  '&:hover': {
-    backgroundColor: '#003d33',
-  },
-  '&:active': {
-    backgroundColor: '#003d33',
-  },
 });
 
 export const Search = styled('div')(({ theme }) => ({

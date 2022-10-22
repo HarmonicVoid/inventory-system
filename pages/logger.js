@@ -1,26 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PartsAddedLoggerTable from '../components/muiComponents/loggerTable/LoggerTable';
 import PartsUsedLoggerTable from '../components/muiComponents/loggerTable/LoggerTable';
 import { getSession, signIn, useSession } from 'next-auth/react';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { db } from '../config/firebase';
 
 export default function Logger() {
   console.log('Logger page rendered');
   const { data: session, status } = useSession();
+  const [addedLoggerData, setAddedLoggerData] = useState([]);
+  const [utilizedLoggerData, setUtilizedLoggerData] = useState([]);
+
+  useEffect(() => {
+    return onSnapshot(
+      query(collection(db, 'Parts Added Logger')),
+      (snapshot) => {
+        setAddedLoggerData(
+          snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+          })
+        );
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    return onSnapshot(
+      query(collection(db, 'Parts Used Logger')),
+      (snapshot) => {
+        setUtilizedLoggerData(
+          snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+          })
+        );
+      }
+    );
+  }, []);
+
+  console.log(utilizedLoggerData);
 
   if (status === 'authenticated') {
     return (
       <div className="App">
         <Tabs className="Tabs">
           <TabList>
-            <Tab>New Parts Added</Tab>
+            <Tab>Parts Added</Tab>
             <Tab>Parts Used</Tab>
           </TabList>
           <TabPanel>
-            <PartsAddedLoggerTable data={[]} />
+            <PartsAddedLoggerTable data={addedLoggerData} />
           </TabPanel>
           <TabPanel>
-            <PartsUsedLoggerTable data={[]} />
+            <PartsUsedLoggerTable data={utilizedLoggerData} />
           </TabPanel>
         </Tabs>
       </div>
