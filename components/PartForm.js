@@ -207,16 +207,21 @@ function PartForm() {
             newPartModelDocRef.id,
             values.partNumber
           );
-        }
-        setNotify({
-          isOpen: true,
-          message: 'Shared parts added successfully',
-          type: 'success',
-        });
 
-        resetForm();
-        setModelSelection([]);
-        setLoading(false);
+          if (i == 1) {
+            if (setLoading != false) {
+              setNotify({
+                isOpen: true,
+                message: 'Shared parts added successfully',
+                type: 'success',
+              });
+
+              resetForm();
+              setModelSelection([]);
+              setLoading(false);
+            }
+          }
+        }
       }
     } else if (
       (model1.length != 0 &&
@@ -277,15 +282,19 @@ function PartForm() {
             values.partNumber
           );
 
-          setNotify({
-            isOpen: true,
-            message: 'Shared parts added successfully',
-            type: 'success',
-          });
+          if (i == 1) {
+            if (setLoading != false) {
+              setNotify({
+                isOpen: true,
+                message: 'Added successfully!',
+                type: 'success',
+              });
 
-          resetForm();
-          setModelSelection([]);
-          setLoading(false);
+              resetForm();
+              setModelSelection([]);
+              setLoading(false);
+            }
+          }
         }
       }
     } else if (
@@ -454,17 +463,21 @@ function PartForm() {
             newPartModelDocRef.id,
             values.partNumber
           );
+
+          if (i == 1) {
+            if (setLoading != false) {
+              setNotify({
+                isOpen: true,
+                message: 'Added successfully',
+                type: 'success',
+              });
+
+              resetForm();
+              setModelSelection([]);
+              setLoading(false);
+            }
+          }
         }
-
-        setNotify({
-          isOpen: true,
-          message: 'Added successfully',
-          type: 'success',
-        });
-
-        resetForm();
-        setModelSelection([]);
-        setLoading(false);
       } else {
         setNotify({
           isOpen: true,
