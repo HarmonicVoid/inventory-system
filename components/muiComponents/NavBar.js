@@ -86,6 +86,10 @@ const ResponsiveAppBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    if (routePath == '/logger') {
+    } else {
+      router.push('/logger');
+    }
   };
 
   const handleCloseUserMenu = () => {
@@ -214,7 +218,7 @@ const ResponsiveAppBar = () => {
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="Use Part">
+                <Tooltip title="Utilize Part">
                   <Button
                     disableRipple
                     onClick={() => {
@@ -291,7 +295,7 @@ const ResponsiveAppBar = () => {
           </Container>
         </AppBar>
         <Popup
-          title="Use Part"
+          title="UTILIZE PART"
           openPopup={openUsePopup}
           setOpenPopup={setOpenUsePopup}
         >
