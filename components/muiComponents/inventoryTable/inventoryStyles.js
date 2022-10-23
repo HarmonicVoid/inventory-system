@@ -11,13 +11,14 @@ export const PageContainer = styled(
   backgroundColor: '#121212',
   padding: '10px',
   borderRadius: 0,
+  width: '100%',
 });
 
 export const TableStyled = styled(
   Table,
   {}
 )({
-  minWidth: 800,
+  width: '100%',
   borderCollapse: 'separate',
   borderSpacing: '0px 5px ',
   backgroundColor: '#353535',

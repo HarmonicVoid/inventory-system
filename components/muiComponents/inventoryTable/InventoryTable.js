@@ -167,6 +167,7 @@ function InventoryTable({ model, depend }) {
             justifyContent: 'space-between',
             padding: '10px',
             borderRadius: 0,
+            width: '100%',
           }}
         >
           <Box

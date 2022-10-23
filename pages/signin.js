@@ -35,15 +35,18 @@ function SignIn({ providers }) {
           >
             <Card
               sx={{
-                width: '40%',
-                height: '30%',
+                width: '650px',
+                height: '400px',
                 backgroundColor: '#202020',
                 borderRadius: 5,
               }}
             >
               <CardContent sx={{ height: '100%' }}>
                 <Typography sx={{ marginTop: 5 }} align="center" variant="h6">
-                  Please sign in with your ComputerCare email.
+                  Welcome,
+                </Typography>
+                <Typography sx={{ marginTop: 2 }} align="center" variant="h6">
+                  please sign in with your work credentials
                 </Typography>
 
                 <Box
