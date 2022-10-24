@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0.5rem;
+  padding: 1.5rem 0.5rem;
 }
 
 .InventoryTable {
@@ -29,7 +29,7 @@
 
 .LoggerTable {
   min-width: 375px;
-  width: 55%;
+  width: 70%;
 }
  
  
@@ -38,7 +38,6 @@
 }
  
 .react-tabs__tab-list {
-
   display: flex;
   align-items: center;
   justify-content: space-between;
