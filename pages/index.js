@@ -23,16 +23,6 @@ export default function Home() {
 
   if (status === 'authenticated') {
     return (
-      // <Box
-      //   sx={{
-      //     display: 'grid',
-      //     justifyContent: 'center',
-      //     alignItems: 'center',
-      //     width: '100%',
-      //     marginTop: '30px',
-      //     marginBottom: '30px',
-      //   }}
-      // ></Box>
       <div className="TableWrapper">
         <div className="InventoryTable">
           {modelNames
@@ -40,11 +30,7 @@ export default function Home() {
               item.model.toLowerCase().includes(modelQueried.toLowerCase())
             )
             .map((item) => (
-              <InventoryTable
-                key={item.id}
-                depend={modelNames}
-                model={[item.id, item.model]}
-              />
+              <InventoryTable key={item.id} model={[item.id, item.model]} />
             ))}
         </div>
       </div>
