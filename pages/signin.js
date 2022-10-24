@@ -31,21 +31,23 @@ function SignIn({ providers }) {
               justifyContent: 'center',
               height: '100vh',
               width: '100%',
+              padding: 3,
             }}
           >
             <Card
               sx={{
-                width: '650px',
-                height: '400px',
+                width: '600px',
+                height: '300px',
                 backgroundColor: '#202020',
                 borderRadius: 5,
+                elevation: 3,
               }}
             >
               <CardContent sx={{ height: '100%' }}>
                 <Typography sx={{ marginTop: 5 }} align="center" variant="h6">
                   Welcome,
                 </Typography>
-                <Typography sx={{ marginTop: 2 }} align="center" variant="h6">
+                <Typography sx={{ marginTop: 1 }} align="center" variant="h6">
                   please log in with your work credentials
                 </Typography>
 
