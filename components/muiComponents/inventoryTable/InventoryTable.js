@@ -18,7 +18,12 @@ import Notifications from '../Notification';
 import ClearIcon from '@mui/icons-material/Clear';
 import { collection, onSnapshot, query } from '@firebase/firestore';
 import { db } from '../../../config/firebase';
-import { TableHead, TablePagination, TableSortLabel } from '@mui/material';
+import {
+  TableHead,
+  TablePagination,
+  TableSortLabel,
+  Typography,
+} from '@mui/material';
 
 const headCells = [
   { id: 'id', label: 'Part' },
@@ -74,7 +79,7 @@ function InventoryTable({ model }) {
     type: 'info',
   });
 
-  const [records, setRecords] = React.useState(partsData);
+  const [records, setRecords] = useState(partsData);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -185,7 +190,7 @@ function InventoryTable({ model }) {
               color: 'white',
             }}
           >
-            {model[1]}
+            <Typography variant="h5">{model[1]}</Typography>
           </Box>
 
           <Box
@@ -225,7 +230,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -251,7 +256,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -277,7 +282,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -303,7 +308,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -332,7 +337,7 @@ function InventoryTable({ model }) {
                 <TableRow key={item.id}>
                   <TableCell
                     sx={{
-                      fontSize: '1.3rem',
+                      fontSize: '1.1rem',
                       width: '35%',
                       backgroundColor: '#263237',
                       padding: '2px',
@@ -343,7 +348,7 @@ function InventoryTable({ model }) {
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontSize: '1.3rem',
+                      fontSize: '1.1rem',
                       width: '15%',
                       backgroundColor: '#59656A',
                       padding: '2px',
@@ -355,7 +360,7 @@ function InventoryTable({ model }) {
 
                   <TableCell
                     sx={{
-                      fontSize: '1.3rem',
+                      fontSize: '1.1rem',
                       width: '25%',
                       backgroundColor: '#7780AC',
                       padding: '2px',
@@ -371,7 +376,7 @@ function InventoryTable({ model }) {
 
                   <TableCell
                     sx={{
-                      fontSize: '1.3rem',
+                      fontSize: '1.1rem',
                       width: '15%',
                       backgroundColor: '#59656A',
                       padding: '2px',
