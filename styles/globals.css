@@ -38,8 +38,7 @@
 }
  
 .react-tabs__tab-list {
-  width: 50%;
-  margin: 0 auto 2rem;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,12 +55,12 @@
   transition: all 0.1s;
   background: #334145;
   font-weight: bold;
-
-
 }
  
 .react-tabs__tab--selected {
   background: #455A64;
+  outline-width: 0;
+
 }
  
 .react-tabs__tab--disabled {
@@ -80,9 +79,4 @@
  
 .react-tabs__tab-panel--selected {
   display: flex;
-  justify-content: center;
-
-  height: 85%;
-
- 
 }
