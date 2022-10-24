@@ -86,10 +86,6 @@ const ResponsiveAppBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-    if (routePath == '/logger') {
-    } else {
-      router.push('/logger');
-    }
   };
 
   const handleCloseUserMenu = () => {
@@ -157,11 +153,17 @@ const ResponsiveAppBar = () => {
                     display: { xs: 'block', md: 'none' },
                   }}
                 >
-                  {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                  ))}
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorElNav(null);
+                      if (routePath == '/logger') {
+                      } else {
+                        router.push('/logger');
+                      }
+                    }}
+                  >
+                    <Typography textAlign="center">Part History</Typography>
+                  </MenuItem>
                 </Menu>
               </Box>
 
