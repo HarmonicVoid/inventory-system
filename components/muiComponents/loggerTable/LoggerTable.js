@@ -155,7 +155,7 @@ export default function MyTable({ data }) {
           backgroundColor: '#041316',
         }}
       >
-        <TableContainer sx={{ height: '100%' }}>
+        <TableContainer sx={{ height: '600px' }}>
           <TableStyled>
             <TableHead
               sx={{
