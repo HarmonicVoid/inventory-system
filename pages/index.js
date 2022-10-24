@@ -3,7 +3,6 @@ import { useRecoilValue } from 'recoil';
 import { modelState } from '../atoms/modelSearchAtom';
 import { getSession, signIn, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
-import { Box } from '@mui/material';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
@@ -24,29 +23,31 @@ export default function Home() {
 
   if (status === 'authenticated') {
     return (
-      <Box
-        sx={{
-          display: 'grid',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          marginTop: '30px',
-          marginBottom: '30px',
-        }}
-      >
-        {modelNames
-          .filter((item) =>
-            item.model.toLowerCase().includes(modelQueried.toLowerCase())
-          )
-          .map((item) => (
-            <div key={item.id}>
+      // <Box
+      //   sx={{
+      //     display: 'grid',
+      //     justifyContent: 'center',
+      //     alignItems: 'center',
+      //     width: '100%',
+      //     marginTop: '30px',
+      //     marginBottom: '30px',
+      //   }}
+      // ></Box>
+      <div className="TableWrapper">
+        <div className="InventoryTable">
+          {modelNames
+            .filter((item) =>
+              item.model.toLowerCase().includes(modelQueried.toLowerCase())
+            )
+            .map((item) => (
               <InventoryTable
+                key={item.id}
                 depend={modelNames}
                 model={[item.id, item.model]}
               />
-            </div>
-          ))}
-      </Box>
+            ))}
+        </div>
+      </div>
     );
   }
 

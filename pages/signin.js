@@ -13,7 +13,7 @@ function SignIn({ providers }) {
   const router = useRouter();
 
   if (status === 'loading') {
-    return 'Loading or not authenticated...';
+    return 'Loading...';
   }
 
   if (status === 'authenticated') {

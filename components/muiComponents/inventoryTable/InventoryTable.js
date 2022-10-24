@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  PageContainer,
   Search,
   SearchIconWrapper,
   StyledInputBase,
@@ -157,53 +156,57 @@ function InventoryTable({ model, depend }) {
   };
 
   return (
-    <>
-      <PageContainer elevation={2}>
-        <Card
-          elevation={5}
+    <Box sx={{ width: '100%', height: '80%' }}>
+      <Card
+        elevation={5}
+        sx={{
+          display: 'flex',
+          backgroundColor: '#3D3D3D',
+          justifyContent: 'space-between',
+          padding: '10px',
+          borderRadius: 0,
+        }}
+      >
+        <Box
           sx={{
+            fontSize: '1.5rem',
             display: 'flex',
-            backgroundColor: '#3D3D3D',
-            justifyContent: 'space-between',
-            padding: '10px',
-            borderRadius: 0,
-            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontWeight: 1000,
+            color: 'white',
           }}
         >
-          <Box
-            sx={{
-              fontSize: '1.5rem',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              fontWeight: 1000,
-              color: 'white',
-            }}
-          >
-            {model[1]}
-          </Box>
+          {model[1]}
+        </Box>
 
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search Parts..."
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={handleSearch}
-              />
-            </Search>
-          </Box>
-        </Card>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search Parts..."
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={handleSearch}
+            />
+          </Search>
+        </Box>
+      </Card>
 
-        <TableContainer sx={{ padding: 1 }}>
+      <Card
+        elevation={5}
+        sx={{
+          height: '100%',
+        }}
+      >
+        <TableContainer sx={{ padding: 1, height: '100%' }}>
           <TableStyled>
             <TableHead
               sx={{
@@ -391,7 +394,7 @@ function InventoryTable({ model, depend }) {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </PageContainer>
+      </Card>
 
       <ConfirmDialog
         confirmDialog={confirmDialog}
@@ -399,8 +402,7 @@ function InventoryTable({ model, depend }) {
       />
 
       <Notifications notify={notify} setNotify={setNotify} />
-      <></>
-    </>
+    </Box>
   );
 }
 

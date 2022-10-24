@@ -1,28 +1,28 @@
-import Card from '@mui/material/Card';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import Table from '@mui/material/Table';
-
-export const PageContainer = styled(
-  Card,
-  {}
-)({
-  backgroundColor: '#121212',
-  padding: '10px',
-  borderRadius: 0,
-  width: '100%',
-});
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 export const TableStyled = styled(
   Table,
   {}
 )({
-  width: '100%',
   borderCollapse: 'separate',
   borderSpacing: '0px 5px ',
   backgroundColor: '#353535',
 });
+
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {},
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    color: 'white',
+  },
+  '&.MuiTableCell-root': {
+    borderColor: '#424242    ',
+  },
+}));
 
 export const CreateButton = styled(
   Button,

@@ -13,34 +13,36 @@
 }
 
 
-/* Style App.js wrapper */
-.App {
-  width: 100vw;
-  height: 100vh;
+/* Style wrapper */
+.TableWrapper {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  color: white;
-  background: #073763;
 }
- 
-/* Tab Container */
-.Tabs {
-  width: 80%;
-  height: 100%;
-  min-height: 400px;
-  padding: 2rem 1rem;
-  color: #E8F0F2;
+
+.InventoryTable {
+
+  min-width: 375px;
+  width: 55%;
+  padding: 2rem 0.5rem;
+
 
 }
+
+.LoggerTable {
+  min-width: 375px;
+  width: 55%;
+  padding: 2rem 0.5rem;
+}
+ 
  
 .react-tabs {
   -webkit-tap-highlight-color: transparent;
 }
  
 .react-tabs__tab-list {
-  width: 40%;
+  width: 50%;
   margin: 0 auto 2rem;
   display: flex;
   align-items: center;
@@ -73,7 +75,6 @@
  
 .react-tabs__tab:hover {
   background: #546b76;
-  
 
 }
  

@@ -42,8 +42,8 @@ export default function Logger() {
 
   if (status === 'authenticated') {
     return (
-      <div className="App">
-        <Tabs className="Tabs">
+      <div className="TableWrapper">
+        <Tabs className="LoggerTable">
           <TabList>
             <Tab>Parts Added</Tab>
             <Tab>Parts Used</Tab>
