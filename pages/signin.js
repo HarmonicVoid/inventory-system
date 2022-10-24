@@ -23,65 +23,63 @@ function SignIn({ providers }) {
   return (
     <>
       {!session ? (
-        <>
-          <Box
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            width: '100%',
+            padding: 3,
+          }}
+        >
+          <Card
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100vh',
-              width: '100%',
-              padding: 3,
+              width: '600px',
+              height: '300px',
+              backgroundColor: '#202020',
+              borderRadius: 5,
+              elevation: 3,
             }}
           >
-            <Card
-              sx={{
-                width: '600px',
-                height: '300px',
-                backgroundColor: '#202020',
-                borderRadius: 5,
-                elevation: 3,
-              }}
-            >
-              <CardContent sx={{ height: '100%' }}>
-                <Typography sx={{ marginTop: 5 }} align="center" variant="h6">
-                  Welcome,
-                </Typography>
-                <Typography sx={{ marginTop: 1 }} align="center" variant="h6">
-                  please log in with your work credentials
-                </Typography>
+            <CardContent sx={{ height: '100%' }}>
+              <Typography sx={{ marginTop: 5 }} align="center" variant="h6">
+                Welcome,
+              </Typography>
+              <Typography sx={{ marginTop: 1 }} align="center" variant="h6">
+                please log in with your work credentials
+              </Typography>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '50%',
-                  }}
-                >
-                  {Object.values(providers).map((provider) => (
-                    <div key={provider.name}>
-                      <Button
-                        variant="contained"
-                        onClick={() =>
-                          SignIntoProvider(provider.id, {
-                            callbackUrl: `${
-                              router.query.callbackUrl
-                                ? router.query.callbackUrl
-                                : window.location.origin
-                            }`,
-                          })
-                        }
-                      >
-                        Sign in
-                      </Button>
-                    </div>
-                  ))}
-                </Box>
-              </CardContent>
-            </Card>
-          </Box>
-        </>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '50%',
+                }}
+              >
+                {Object.values(providers).map((provider) => (
+                  <div key={provider.name}>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        SignIntoProvider(provider.id, {
+                          callbackUrl: `${
+                            router.query.callbackUrl
+                              ? router.query.callbackUrl
+                              : window.location.origin
+                          }`,
+                        })
+                      }
+                    >
+                      Sign in
+                    </Button>
+                  </div>
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
       ) : (
         <></>
       )}
