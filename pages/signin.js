@@ -46,7 +46,7 @@ function SignIn({ providers }) {
                   Welcome,
                 </Typography>
                 <Typography sx={{ marginTop: 2 }} align="center" variant="h6">
-                  please sign in with your work credentials
+                  please log in with your work credentials
                 </Typography>
 
                 <Box
