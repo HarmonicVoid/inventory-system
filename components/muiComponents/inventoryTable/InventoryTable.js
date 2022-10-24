@@ -41,7 +41,7 @@ const headCells = [
   },
 ];
 
-function InventoryTable({ model, depend }) {
+function InventoryTable({ model }) {
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(pages[page]);
