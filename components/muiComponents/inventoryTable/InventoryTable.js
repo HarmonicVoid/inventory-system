@@ -190,7 +190,7 @@ function InventoryTable({ model }) {
               color: 'white',
             }}
           >
-            <Typography variant="h5">{model[1]}</Typography>
+            <Typography variant="h6">{model[1]}</Typography>
           </Box>
 
           <Box
@@ -230,7 +230,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.3rem',
+                      fontSize: '1.2rem',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -256,10 +256,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.3rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      fontSize: '1.2rem',
                     }}
                   >
                     {headCells[1].disableSorting ? (
@@ -282,10 +279,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.3rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      fontSize: '1.2rem',
                     }}
                   >
                     {headCells[2].disableSorting ? (
@@ -308,10 +302,7 @@ function InventoryTable({ model }) {
                 >
                   <Box
                     sx={{
-                      fontSize: '1.3rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      fontSize: '1.2rem',
                     }}
                   >
                     {headCells[3].disableSorting ? (
