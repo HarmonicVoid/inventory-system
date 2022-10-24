@@ -160,52 +160,53 @@ function InventoryTable({ model, depend }) {
       <Card
         elevation={5}
         sx={{
-          display: 'flex',
-          backgroundColor: '#3D3D3D',
-          justifyContent: 'space-between',
-          padding: '10px',
-          borderRadius: 0,
-        }}
-      >
-        <Box
-          sx={{
-            fontSize: '1.5rem',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontWeight: 1000,
-            color: 'white',
-          }}
-        >
-          {model[1]}
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search Parts..."
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={handleSearch}
-            />
-          </Search>
-        </Box>
-      </Card>
-
-      <Card
-        elevation={5}
-        sx={{
           height: '100%',
+          borderRadius: 0,
+          padding: 1,
         }}
       >
+        <Card
+          elevation={3}
+          sx={{
+            display: 'flex',
+            backgroundColor: '#3D3D3D',
+            justifyContent: 'space-between',
+            padding: '10px',
+            borderRadius: 0,
+          }}
+        >
+          <Box
+            sx={{
+              fontSize: '1.5rem',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontWeight: 1000,
+              color: 'white',
+            }}
+          >
+            {model[1]}
+          </Box>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search Parts..."
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={handleSearch}
+              />
+            </Search>
+          </Box>
+        </Card>
         <TableContainer sx={{ padding: 1, height: '100%' }}>
           <TableStyled>
             <TableHead
