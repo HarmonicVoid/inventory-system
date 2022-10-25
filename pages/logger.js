@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PartsAddedLoggerTable from '../components/muiComponents/loggerTable/LoggerTable';
 import PartsUsedLoggerTable from '../components/muiComponents/loggerTable/LoggerTable';
 import { getSession, signIn, useSession } from 'next-auth/react';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { db } from '../config/firebase';
 
@@ -14,7 +14,7 @@ export default function Logger() {
 
   useEffect(() => {
     return onSnapshot(
-      query(collection(db, 'Parts Added Logger')),
+      query(collection(db, 'Parts Added Logger'), orderBy('timestamp', 'desc')),
       (snapshot) => {
         setAddedLoggerData(
           snapshot.docs.map((doc) => {
@@ -27,7 +27,7 @@ export default function Logger() {
 
   useEffect(() => {
     return onSnapshot(
-      query(collection(db, 'Parts Used Logger')),
+      query(collection(db, 'Parts Used Logger'), orderBy('timestamp', 'desc')),
       (snapshot) => {
         setUtilizedLoggerData(
           snapshot.docs.map((doc) => {

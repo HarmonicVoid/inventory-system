@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 import { modelState } from '../atoms/modelSearchAtom';
 import { getSession, signIn, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 export default function Home() {
@@ -12,20 +12,26 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    return onSnapshot(query(collection(db, 'iPhone Models')), (snapshot) => {
-      setModelNames(
-        snapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() };
-        })
-      );
-    });
+    return onSnapshot(
+      query(collection(db, 'iPhone Models'), orderBy('model')),
+      (snapshot) => {
+        setModelNames(
+          snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+          })
+        );
+      }
+    );
   }, []);
+
+  console.log(modelNames);
 
   if (status === 'authenticated') {
     return (
       <div className="TableWrapper">
         <div className="InventoryTable">
           {modelNames
+
             .filter((item) =>
               item.model.toLowerCase().includes(modelQueried.toLowerCase())
             )
