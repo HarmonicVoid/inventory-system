@@ -21,6 +21,9 @@
     flex-grow: 1;
     display: flex;
   }
+  .SiteName {
+    display: flex;
+  }
  
 }
 
@@ -30,6 +33,9 @@
     display: flex;
   } 
   .NavBarMenuIcons {
+    display: none;
+  }
+  .SiteName {
     display: none;
   }
  

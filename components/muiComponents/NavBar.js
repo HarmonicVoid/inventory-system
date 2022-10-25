@@ -105,25 +105,26 @@ const ResponsiveAppBar = () => {
         <AppBar sx={{ backgroundColor: '#272727' }} position="sticky">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{
-                  fontSize: '1.7rem',
-                  mr: 3,
-                  display: { xs: 'none', md: 'flex' },
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  if (routePath == '/') {
-                  } else {
-                    router.push('/');
-                  }
-                }}
-              >
-                Consignment
-              </Typography>
+              <div className="SiteName">
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  sx={{
+                    fontSize: '1.7rem',
+                    mr: 3,
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    if (routePath == '/') {
+                    } else {
+                      router.push('/');
+                    }
+                  }}
+                >
+                  Consignment
+                </Typography>
+              </div>
 
               <div className="NavBarMobileMenu">
                 <IconButton
@@ -275,6 +276,7 @@ const ResponsiveAppBar = () => {
                   </IconButton>
                 </Tooltip>
                 <Menu
+                  disableAutoFocusItem
                   sx={{ mt: '45px' }}
                   id="menu-appbar"
                   anchorEl={anchorElUser}
