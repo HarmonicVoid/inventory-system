@@ -137,6 +137,7 @@ const ResponsiveAppBar = () => {
                   <MenuIcon />
                 </IconButton>
                 <Menu
+                  disableAutoFocusItem
                   id="menu-appbar"
                   anchorEl={anchorElNav}
                   anchorOrigin={{
