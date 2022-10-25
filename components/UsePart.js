@@ -3,23 +3,7 @@ import React, { useState } from 'react';
 import { InputChange } from './InputChange';
 import Notifications from './muiComponents/Notification';
 import TextInput from './muiComponents/TextInput';
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  getDoc,
-  doc,
-  setDoc,
-  updateDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  collectionGroup,
-  getDocs,
-  deleteDoc,
-  docs,
-  where,
-} from '@firebase/firestore';
+import { query, collectionGroup, getDocs, where } from '@firebase/firestore';
 import { db } from '/config/firebase';
 import * as partService from '../services/addPartServices';
 import { useSession } from 'next-auth/react';

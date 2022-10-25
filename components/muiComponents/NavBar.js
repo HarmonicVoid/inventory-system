@@ -159,6 +159,17 @@ const ResponsiveAppBar = () => {
                   <MenuItem
                     onClick={() => {
                       setAnchorElNav(null);
+                      if (routePath == '/') {
+                      } else {
+                        router.push('/');
+                      }
+                    }}
+                  >
+                    <Typography textAlign="center">Home</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorElNav(null);
                       if (routePath == '/logger') {
                       } else {
                         router.push('/logger');

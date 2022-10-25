@@ -738,7 +738,7 @@ function PartForm() {
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height: '90%',
+        height: '700px',
       }}
     >
       <Card sx={{ width: '70%', height: '80%' }} elevation={5}>
