@@ -12,6 +12,37 @@
   }
 }
 
+@media screen and (min-width: 600px) {
+  .NavBarMobileMenu {
+    display: none;
+  } 
+  .NavBarMenuIcons {
+   
+    flex-grow: 1;
+    display: flex;
+  }
+ 
+}
+
+@media screen and (max-width: 600px) {
+  .NavBarMobileMenu {
+    flex-grow: 1;
+    display: flex;
+  } 
+  .NavBarMenuIcons {
+    display: none;
+  }
+ 
+
+}
+
+
+
+
+
+
+
+
 
 /* Style wrapper */
 .TableWrapper {
@@ -19,17 +50,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0.5rem;
+  padding: 1rem 0rem;
 }
 
 .InventoryTable {
-  min-width: 375px;
-  width: 55%;
+  width: 96%;
+  max-width: 800px;
 }
 
 .LoggerTable {
-  min-width: 375px;
-  width: 70%;
+  width: 96%;
+  max-width: 900px;
 }
  
  

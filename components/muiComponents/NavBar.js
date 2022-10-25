@@ -36,9 +36,11 @@ const Search = styled('div')(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: '100%',
+  backgroundColor: 'orange',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
+    backgroundColor: 'green',
   },
 }));
 
@@ -61,6 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
+
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -124,7 +127,7 @@ const ResponsiveAppBar = () => {
                 Consignment
               </Typography>
 
-              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <div className="NavBarMobileMenu">
                 <IconButton
                   size="large"
                   aria-label="account of current user"
@@ -165,9 +168,9 @@ const ResponsiveAppBar = () => {
                     <Typography textAlign="center">Part History</Typography>
                   </MenuItem>
                 </Menu>
-              </Box>
+              </div>
 
-              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              <div className="NavBarMenuIcons">
                 <Tooltip title="Add Part">
                   <Button
                     sx={{
@@ -243,7 +246,7 @@ const ResponsiveAppBar = () => {
                     />
                   </Button>
                 </Tooltip>
-              </Box>
+              </div>
 
               <Search>
                 <SearchIconWrapper>
