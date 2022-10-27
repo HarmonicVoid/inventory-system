@@ -24,8 +24,6 @@ export default function Home() {
     );
   }, []);
 
-  console.log(modelNames);
-
   if (status === 'authenticated') {
     return (
       <div className="TableWrapper">
