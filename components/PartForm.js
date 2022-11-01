@@ -732,16 +732,8 @@ function PartForm() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '700px',
-      }}
-    >
-      <Card sx={{ width: '70%', height: '80%' }} elevation={5}>
+    <>
+      <Card elevation={5}>
         <Box
           sx={{
             display: 'flex',
@@ -879,6 +871,7 @@ function PartForm() {
                 sx={{
                   width: '80%',
                   marginTop: '20px',
+                  marginBottom: '60px',
                 }}
               >
                 <Button
@@ -934,7 +927,7 @@ function PartForm() {
         </Button>
       </Popup>
       <Notifications notify={notify} setNotify={setNotify} />
-    </div>
+    </>
   );
 }
 

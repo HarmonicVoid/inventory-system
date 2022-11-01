@@ -8,15 +8,24 @@ export default function AddPart() {
 
   if (status === 'authenticated') {
     return (
-      <Box
-        sx={{
+      <div
+        style={{
           display: 'flex',
-          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
           height: '100vh',
         }}
       >
-        <PartForm />
-      </Box>
+        <Box
+          sx={{
+            width: '90%',
+            maxWidth: '1000px',
+            height: '85%',
+          }}
+        >
+          <PartForm />
+        </Box>
+      </div>
     );
   }
   return signIn();

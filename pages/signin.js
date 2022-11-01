@@ -7,13 +7,26 @@ import {
 import { Button, Card, CardContent, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function SignIn({ providers }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   if (status === 'loading') {
-    return 'Loading...';
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress thickness={5} size="70px" />
+      </Box>
+    );
   }
 
   if (status === 'authenticated') {
