@@ -7,7 +7,6 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { db } from '../config/firebase';
 
 export default function Logger() {
-  console.log('Logger page rendered');
   const { data: session, status } = useSession();
   const [addedLoggerData, setAddedLoggerData] = useState([]);
   const [utilizedLoggerData, setUtilizedLoggerData] = useState([]);
@@ -37,8 +36,6 @@ export default function Logger() {
       }
     );
   }, []);
-
-  console.log(utilizedLoggerData);
 
   if (status === 'authenticated') {
     return (
