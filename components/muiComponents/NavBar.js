@@ -307,8 +307,8 @@ const ResponsiveAppBar = () => {
                 >
                   <MenuItem
                     onClick={() => {
-                      signOut();
                       auth.signOut();
+                      signOut();
                     }}
                   >
                     <Typography textAlign="center">Logout</Typography>
@@ -328,5 +328,7 @@ const ResponsiveAppBar = () => {
       </>
     );
   }
+
+  return <></>;
 };
 export default ResponsiveAppBar;
