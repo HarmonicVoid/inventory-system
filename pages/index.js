@@ -25,7 +25,6 @@ export default function Home() {
       }
     );
   }, []);
-  console.log(status);
 
   const auth = getAuth();
 
@@ -38,7 +37,7 @@ export default function Home() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        signOut();
+
         // ...
       });
     return (
