@@ -28,7 +28,7 @@ export default function AddPart() {
       </div>
     );
   }
-  return signIn();
+  return <></>;
 }
 
 export async function getServerSideProps(context) {

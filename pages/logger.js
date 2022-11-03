@@ -56,7 +56,7 @@ export default function Logger() {
     );
   }
 
-  return signIn();
+  return <></>;
 }
 
 export async function getServerSideProps(context) {
