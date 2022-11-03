@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { signIn, signOut } from 'next-auth/react';
+import { adminApp } from '../firebaseAdmin';
+import { db } from '../../../config/firebase';
+import { query, collection, getDocs, where } from '@firebase/firestore';
 
 export default NextAuth({
   providers: [
@@ -19,15 +21,69 @@ export default NextAuth({
   },
 
   callbacks: {
-    async signIn({ account, profile }) {
-      if (account.provider === 'google') {
-        return (
-          (profile.email_verified &&
-            profile.email.endsWith('@computercare.net')) ||
-          profile.email == 'mb.reach2022@gmail.com'
-        );
+    async signIn({ user }) {
+      const isAllowedToSignIn = await VerifyAuth(user.email);
+      console.log('testing');
+      console.log(isAllowedToSignIn);
+      if (isAllowedToSignIn) {
+        return true;
+      } else {
+        // Return false to display a default error message
+        return false;
+        // Or you can return a URL to redirect to:
+        // return '/unauthorized'
       }
-      return true; // Do different verification for other providers that don't have `email_verified`
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      const additionalClaims = {
+        isAdmin: false,
+      };
+
+      await adminApp
+        .auth()
+        .createUser({
+          uid: token.sub,
+          email: token.email,
+        })
+        .catch((error) => {
+          console.log('Error creating new user:', error);
+        });
+
+      await adminApp
+        .auth()
+        .createCustomToken(token.sub, additionalClaims)
+        .then((firebaseToken) => {
+          token.firebaseToken = firebaseToken;
+        })
+        .catch((error) => {
+          console.log('Error creating token:', error);
+        });
+
+      return token;
+    },
+    async session({ session, token, user }) {
+      session.userId = token.sub;
+      session.firebaseToken = token.firebaseToken;
+
+      return session;
     },
   },
 });
+
+const VerifyAuth = async (email) => {
+  const accountQuery = query(
+    collection(db, 'authUsers'),
+    where('email', '==', email)
+  );
+  const queryAccountDocs = await getDocs(accountQuery);
+  const accountData = queryAccountDocs.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  if (accountData.length == 0) {
+    return false;
+  } else {
+    return true;
+  }
+};

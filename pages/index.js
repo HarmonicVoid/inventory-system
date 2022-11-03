@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { modelState } from '../atoms/modelSearchAtom';
-import { getSession, signIn, useSession } from 'next-auth/react';
+import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { getAuth, signInWithCustomToken } from 'firebase/auth';
 
 export default function Home() {
   const modelQueried = useRecoilValue(modelState);
   const [modelNames, setModelNames] = useState([]);
   const { data: session, status } = useSession();
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     return onSnapshot(
@@ -23,8 +25,22 @@ export default function Home() {
       }
     );
   }, []);
+  console.log(status);
+
+  const auth = getAuth();
 
   if (status === 'authenticated') {
+    signInWithCustomToken(auth, session.firebaseToken)
+      .then((userCredential) => {
+        // Signed in
+        // setUser(userCredential.user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        signOut();
+        // ...
+      });
     return (
       <div className="TableWrapper">
         <div className="InventoryTable">

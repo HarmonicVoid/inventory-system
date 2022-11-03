@@ -23,6 +23,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import { signOut, useSession } from 'next-auth/react';
 import Popup from './Popup';
 import UsePart from '../UsePart';
+import { getAuth } from 'firebase/auth';
 
 const pages = ['Part History'];
 
@@ -70,6 +71,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const ResponsiveAppBar = () => {
   const { data: session, status } = useSession();
+  const auth = getAuth();
 
   const [modelSearchQuery, setModelSearchQuery] = useRecoilState(modelState);
   const [openUsePopup, setOpenUsePopup] = React.useState(false);
@@ -303,7 +305,12 @@ const ResponsiveAppBar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem onClick={signOut}>
+                  <MenuItem
+                    onClick={() => {
+                      signOut();
+                      auth.signOut();
+                    }}
+                  >
                     <Typography textAlign="center">Logout</Typography>
                   </MenuItem>
                 </Menu>
