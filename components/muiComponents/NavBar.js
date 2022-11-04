@@ -108,24 +108,32 @@ const ResponsiveAppBar = () => {
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <div className="SiteName">
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  sx={{
-                    fontSize: '1.7rem',
-                    mr: 3,
-                    cursor: 'pointer',
-                  }}
+                <Button
+                  disableRipple
                   onClick={() => {
                     if (routePath == '/') {
                     } else {
                       router.push('/');
                     }
                   }}
+                  sx={{
+                    mr: 2,
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'none',
+                    },
+                  }}
                 >
-                  Consignment
-                </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '1.7rem',
+                      fontWeight: 500,
+                    }}
+                    component="div"
+                  >
+                    Consignment
+                  </Typography>
+                </Button>
               </div>
 
               <div className="NavBarMobileMenu">
