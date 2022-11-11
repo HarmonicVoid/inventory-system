@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CacheProvider } from '@emotion/react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import createEmotionCache from '../utility/createEmotionCache';
 import darkTheme from '../styles/theme/darkTheme';
 import '../styles/globals.css';
@@ -18,7 +18,6 @@ const MyApp = (props) => {
     <RecoilRoot>
       <CacheProvider value={emotionCache}>
         <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
           <SessionProvider session={pageProps.session}>
             <NavBar />
             <Component {...pageProps} />
