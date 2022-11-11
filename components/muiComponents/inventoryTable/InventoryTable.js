@@ -19,6 +19,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { collection, onSnapshot, query } from '@firebase/firestore';
 import { db } from '../../../config/firebase';
 import {
+  CircularProgress,
   TableHead,
   TablePagination,
   TableSortLabel,
@@ -159,6 +160,22 @@ function InventoryTable({ model }) {
       getComparator(order, orderBy)
     ).slice(page * rowsPerPage, (page + 1) * rowsPerPage);
   };
+
+  if (partsData.length == 0) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress thickness={5} size="70px" />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ width: '100%', height: '80%' }}>

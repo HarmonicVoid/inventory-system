@@ -43,36 +43,20 @@ export default function Home() {
         // ...
       });
 
-    if (modelNames.length == 0) {
-      return (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <CircularProgress thickness={5} size="70px" />
-        </Box>
-      );
-    } else {
-      return (
-        <div className="TableWrapper">
-          <div className="InventoryTable">
-            {modelNames
+    return (
+      <div className="TableWrapper">
+        <div className="InventoryTable">
+          {modelNames
 
-              .filter((item) =>
-                item.model.toLowerCase().includes(modelQueried.toLowerCase())
-              )
-              .map((item) => (
-                <InventoryTable key={item.id} model={[item.id, item.model]} />
-              ))}
-          </div>
+            .filter((item) =>
+              item.model.toLowerCase().includes(modelQueried.toLowerCase())
+            )
+            .map((item) => (
+              <InventoryTable key={item.id} model={[item.id, item.model]} />
+            ))}
         </div>
-      );
-    }
+      </div>
+    );
   }
 
   return <></>;
