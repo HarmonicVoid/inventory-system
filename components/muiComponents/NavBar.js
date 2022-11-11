@@ -113,7 +113,7 @@ const ResponsiveAppBar = () => {
                   onClick={() => {
                     if (routePath == '/') {
                     } else {
-                      router.push('/');
+                      router.push('/', undefined, { shallow: true });
                     }
                   }}
                   sx={{
@@ -202,7 +202,7 @@ const ResponsiveAppBar = () => {
                     onClick={() => {
                       if (routePath == '/addpart') {
                       } else {
-                        router.push('/addpart');
+                        router.push('/addpart', undefined, { shallow: true });
                       }
                     }}
                   >
@@ -228,7 +228,7 @@ const ResponsiveAppBar = () => {
                     onClick={() => {
                       if (routePath == '/logger') {
                       } else {
-                        router.push('/logger');
+                        router.push('/logger', undefined, { shallow: true });
                       }
                     }}
                   >
