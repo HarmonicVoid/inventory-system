@@ -111,10 +111,7 @@ const ResponsiveAppBar = () => {
                 <Button
                   disableRipple
                   onClick={() => {
-                    if (routePath == '/') {
-                    } else {
-                      router.push('/', undefined, { shallow: true });
-                    }
+                    router.push('/');
                   }}
                   sx={{
                     mr: 2,
@@ -169,10 +166,8 @@ const ResponsiveAppBar = () => {
                   <MenuItem
                     onClick={() => {
                       setAnchorElNav(null);
-                      if (routePath == '/') {
-                      } else {
-                        router.push('/');
-                      }
+
+                      router.push('/');
                     }}
                   >
                     <Typography textAlign="center">Home</Typography>
@@ -180,10 +175,8 @@ const ResponsiveAppBar = () => {
                   <MenuItem
                     onClick={() => {
                       setAnchorElNav(null);
-                      if (routePath == '/logger') {
-                      } else {
-                        router.push('/logger');
-                      }
+
+                      router.push('/logger');
                     }}
                   >
                     <Typography textAlign="center">Part History</Typography>
@@ -200,10 +193,7 @@ const ResponsiveAppBar = () => {
                       '&:hover': { backgroundColor: '#455A64' },
                     }}
                     onClick={() => {
-                      if (routePath == '/addpart') {
-                      } else {
-                        router.push('/addpart', undefined, { shallow: true });
-                      }
+                      router.push('/addpart');
                     }}
                   >
                     <LibraryAddIcon
@@ -226,10 +216,7 @@ const ResponsiveAppBar = () => {
                       '&:hover': { backgroundColor: '#455A64' },
                     }}
                     onClick={() => {
-                      if (routePath == '/logger') {
-                      } else {
-                        router.push('/logger', undefined, { shallow: true });
-                      }
+                      router.push('/logger', undefined, { shallow: true });
                     }}
                   >
                     <HistoryIcon
