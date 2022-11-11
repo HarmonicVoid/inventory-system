@@ -19,7 +19,7 @@ export default function AddPart() {
         <Box
           sx={{
             width: '90%',
-            maxWidth: '1000px',
+            maxWidth: '900px',
             height: '85%',
           }}
         >

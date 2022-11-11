@@ -17,6 +17,7 @@ import { useSession } from 'next-auth/react';
 import Button from '@mui/material/Button';
 import Notifications from './muiComponents/Notification';
 import * as partService from '../services/addPartServices';
+import { Padding } from '@mui/icons-material';
 
 const initialValues = {
   modelId: '',
@@ -733,14 +734,14 @@ function PartForm() {
 
   return (
     <>
-      <Card elevation={5}>
+      <Card sx={{ padding: 0 }} elevation={5}>
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             marginTop: 5,
-            marginBottom: 10,
+            marginBottom: 5,
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }} variant="h4">
@@ -870,8 +871,8 @@ function PartForm() {
               <Box
                 sx={{
                   width: '80%',
-                  marginTop: '20px',
-                  marginBottom: '60px',
+                  marginTop: 3,
+                  marginBottom: 5,
                 }}
               >
                 <Button
