@@ -734,13 +734,13 @@ function PartForm() {
 
   return (
     <>
-      <Card sx={{ padding: 0 }} elevation={5}>
+      <Card sx={{ height: '600px' }} elevation={5}>
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 5,
+            marginTop: 10,
             marginBottom: 5,
           }}
         >
