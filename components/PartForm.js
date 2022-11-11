@@ -734,7 +734,7 @@ function PartForm() {
 
   return (
     <>
-      <Card sx={{ height: '600px' }} elevation={5}>
+      <Card elevation={5}>
         <Box
           sx={{
             display: 'flex',
