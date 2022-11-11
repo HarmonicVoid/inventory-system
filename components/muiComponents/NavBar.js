@@ -24,6 +24,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Popup from './Popup';
 import UsePart from '../UsePart';
 import { getAuth } from 'firebase/auth';
+import Link from 'next/link';
 
 const pages = ['Part History'];
 
@@ -186,26 +187,25 @@ const ResponsiveAppBar = () => {
 
               <div className="NavBarMenuIcons">
                 <Tooltip title="Add Part">
-                  <Button
-                    sx={{
-                      color: 'white',
-                      display: 'block',
-                      '&:hover': { backgroundColor: '#455A64' },
-                    }}
-                    onClick={() => {
-                      router.push('/addpart');
-                    }}
-                  >
-                    <LibraryAddIcon
+                  <Link href="/addpart">
+                    <Button
                       sx={{
                         color: 'white',
-                        '&:hover': {
-                          color: 'white',
-                        },
-                        fontSize: '1.8rem',
+                        display: 'block',
+                        '&:hover': { backgroundColor: '#455A64' },
                       }}
-                    />
-                  </Button>
+                    >
+                      <LibraryAddIcon
+                        sx={{
+                          color: 'white',
+                          '&:hover': {
+                            color: 'white',
+                          },
+                          fontSize: '1.8rem',
+                        }}
+                      />
+                    </Button>
+                  </Link>
                 </Tooltip>
 
                 <Tooltip title="Part history">
