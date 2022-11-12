@@ -36,16 +36,7 @@ function SignIn({ providers }) {
   return (
     <>
       {!session ? (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            width: '100%',
-            padding: 3,
-          }}
-        >
+        <div className="pageContainer">
           <Card
             sx={{
               width: '600px',
@@ -53,6 +44,8 @@ function SignIn({ providers }) {
               backgroundColor: '#202020',
               borderRadius: 5,
               elevation: 3,
+              margin: 1,
+              marginTop: '100px',
             }}
           >
             <CardContent sx={{ height: '100%' }}>
@@ -92,7 +85,7 @@ function SignIn({ providers }) {
               </Box>
             </CardContent>
           </Card>
-        </Box>
+        </div>
       ) : (
         <></>
       )}
