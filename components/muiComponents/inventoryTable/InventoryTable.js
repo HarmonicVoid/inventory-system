@@ -15,7 +15,6 @@ import TableRow from '@mui/material/TableRow';
 import Counter from '../Counter';
 import ConfirmDialog from '../ConfirmDialog';
 import Notifications from '../Notification';
-import ClearIcon from '@mui/icons-material/Clear';
 import { collection, onSnapshot, query } from '@firebase/firestore';
 import { db } from '../../../config/firebase';
 import {
