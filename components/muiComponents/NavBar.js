@@ -26,8 +26,6 @@ import UsePart from '../UsePart';
 import { getAuth } from 'firebase/auth';
 import Link from 'next/link';
 
-const pages = ['Part History'];
-
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
