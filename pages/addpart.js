@@ -1,5 +1,5 @@
 import React from 'react';
-import { getSession, signIn, useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import PartForm from '../components/PartForm';
 import { Box } from '@mui/material';
 
