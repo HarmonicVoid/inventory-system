@@ -24,7 +24,6 @@
   .SiteName {
     display: flex;
   }
- 
 }
 
 @media screen and (max-width: 768px) {
@@ -38,25 +37,14 @@
   .SiteName {
     display: none;
   }
- 
-
 }
 
-
-
-
-
-
-
-
-
-/* Style wrapper */
-.TableWrapper {
+.pageContainer {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0rem;
+  padding: 2rem 0rem;
 }
 
 .InventoryTable {
@@ -68,7 +56,6 @@
   width: 96%;
   max-width: 900px;
 }
- 
  
 .react-tabs {
   -webkit-tap-highlight-color: transparent;

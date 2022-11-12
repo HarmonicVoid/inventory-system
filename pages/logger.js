@@ -39,7 +39,7 @@ export default function Logger() {
 
   if (status === 'authenticated') {
     return (
-      <div className="TableWrapper">
+      <div className="pageContainer">
         <Tabs className="LoggerTable">
           <TabList>
             <Tab>Parts Added</Tab>

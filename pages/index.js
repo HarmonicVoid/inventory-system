@@ -44,7 +44,7 @@ export default function Home() {
       });
 
     return (
-      <div className="TableWrapper">
+      <div className="pageContainer">
         <div className="InventoryTable">
           {modelNames
 
