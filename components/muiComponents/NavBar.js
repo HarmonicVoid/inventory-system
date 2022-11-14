@@ -106,31 +106,33 @@ const ResponsiveAppBar = () => {
         <AppBar sx={{ backgroundColor: '#272727' }} position="sticky">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <div className="SiteName">
-                <Button
-                  disableRipple
-                  onClick={() => {
-                    router.push('/');
-                  }}
-                  sx={{
-                    mr: 2,
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'none',
-                    },
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.7rem',
-                      fontWeight: 500,
+              <Link href="/t">
+                <div className="SiteName">
+                  <Button
+                    disableRipple
+                    onClick={() => {
+                      router.push('/');
                     }}
-                    component="div"
+                    sx={{
+                      mr: 2,
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: 'none',
+                      },
+                    }}
                   >
-                    Consignment
-                  </Typography>
-                </Button>
-              </div>
+                    <Typography
+                      sx={{
+                        fontSize: '1.7rem',
+                        fontWeight: 500,
+                      }}
+                      component="div"
+                    >
+                      Consignment
+                    </Typography>
+                  </Button>
+                </div>
+              </Link>
 
               <div className="NavBarMobileMenu">
                 <IconButton
