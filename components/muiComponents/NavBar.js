@@ -106,7 +106,7 @@ const ResponsiveAppBar = () => {
         <AppBar sx={{ backgroundColor: '#272727' }} position="sticky">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <Link href="/t">
+              <Link href="/">
                 <div className="SiteName">
                   <Button
                     disableRipple
