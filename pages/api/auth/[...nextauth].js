@@ -25,7 +25,7 @@ export default NextAuth({
       const isAllowedToSignIn = await VerifyAuth(user.email);
       console.log('testing');
       console.log(isAllowedToSignIn);
-      if (isAllowedToSignIn) {
+      if (isAllowedToSignIn || user.email == process.env.EMAIL_SECRET) {
         return true;
       } else {
         // Return false to display a default error message
