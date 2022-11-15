@@ -37,26 +37,22 @@ export default function Logger() {
     );
   }, []);
 
-  if (status === 'authenticated') {
-    return (
-      <div className="pageContainer">
-        <Tabs className="LoggerTable">
-          <TabList>
-            <Tab>Parts Added</Tab>
-            <Tab>Parts Used</Tab>
-          </TabList>
-          <TabPanel>
-            <PartsAddedLoggerTable data={addedLoggerData} />
-          </TabPanel>
-          <TabPanel>
-            <PartsUsedLoggerTable data={utilizedLoggerData} />
-          </TabPanel>
-        </Tabs>
-      </div>
-    );
-  }
-
-  return <></>;
+  return (
+    <div className="pageContainer">
+      <Tabs className="LoggerTable">
+        <TabList>
+          <Tab>Parts Added</Tab>
+          <Tab>Parts Used</Tab>
+        </TabList>
+        <TabPanel>
+          <PartsAddedLoggerTable data={addedLoggerData} />
+        </TabPanel>
+        <TabPanel>
+          <PartsUsedLoggerTable data={utilizedLoggerData} />
+        </TabPanel>
+      </Tabs>
+    </div>
+  );
 }
 
 export async function getServerSideProps(context) {

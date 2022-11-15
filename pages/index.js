@@ -30,35 +30,31 @@ export default function Home() {
 
   const auth = getAuth();
 
-  if (status === 'authenticated') {
-    signInWithCustomToken(auth, session.firebaseToken)
-      .then((userCredential) => {
-        // Signed in
-        // setUser(userCredential.user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        signOut();
-      });
+  signInWithCustomToken(auth, session.firebaseToken)
+    .then((userCredential) => {
+      // Signed in
+      // setUser(userCredential.user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      signOut();
+    });
 
-    return (
-      <div className="pageContainer">
-        <div className="InventoryTable">
-          {modelNames
+  return (
+    <div className="pageContainer">
+      <div className="InventoryTable">
+        {modelNames
 
-            .filter((item) =>
-              item.model.toLowerCase().includes(modelQueried.toLowerCase())
-            )
-            .map((item) => (
-              <InventoryTable key={item.id} model={[item.id, item.model]} />
-            ))}
-        </div>
+          .filter((item) =>
+            item.model.toLowerCase().includes(modelQueried.toLowerCase())
+          )
+          .map((item) => (
+            <InventoryTable key={item.id} model={[item.id, item.model]} />
+          ))}
       </div>
-    );
-  }
-
-  return <></>;
+    </div>
+  );
 }
 
 export async function getServerSideProps(context) {
