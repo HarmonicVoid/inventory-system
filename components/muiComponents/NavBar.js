@@ -23,7 +23,11 @@ import HistoryIcon from '@mui/icons-material/History';
 import { signOut, useSession } from 'next-auth/react';
 import Popup from './Popup';
 import UsePart from '../UsePart';
-import { getAuth } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithCustomToken,
+  onAuthStateChanged,
+} from 'firebase/auth';
 import Link from 'next/link';
 
 const Search = styled('div')(({ theme }) => ({
@@ -99,6 +103,28 @@ const ResponsiveAppBar = () => {
   };
 
   const routePath = router.pathname;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      // ...
+    } else {
+      // User is signed out
+    }
+  });
+
+  if (session) {
+    signInWithCustomToken(auth, session.firebaseToken)
+      .then((userCredential) => {
+        // Signed in
+        // setUser(userCredential.user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        signOut();
+      });
+  }
 
   if (status === 'authenticated') {
     return (
@@ -327,3 +353,22 @@ const ResponsiveAppBar = () => {
   return <></>;
 };
 export default ResponsiveAppBar;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
