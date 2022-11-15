@@ -23,9 +23,18 @@ export default NextAuth({
   callbacks: {
     async signIn({ user }) {
       const isAllowedToSignIn = await VerifyAuth(user.email);
-      console.log('testing');
-      console.log(isAllowedToSignIn);
+
       if (isAllowedToSignIn || user.email == process.env.EMAIL_SECRET) {
+        await adminApp
+          .auth()
+          .createUser({
+            uid: user.id,
+            email: user.email,
+          })
+          .catch((error) => {
+            console.log('Error creating new user:', error);
+          });
+
         return true;
       } else {
         // Return false to display a default error message
@@ -38,17 +47,6 @@ export default NextAuth({
       const additionalClaims = {
         isAdmin: false,
       };
-
-      await adminApp
-        .auth()
-        .createUser({
-          uid: token.sub,
-          email: token.email,
-        })
-        .catch((error) => {
-          console.log('Error creating new user:', error);
-        });
-
       await adminApp
         .auth()
         .createCustomToken(token.sub, additionalClaims)
@@ -58,10 +56,9 @@ export default NextAuth({
         .catch((error) => {
           console.log('Error creating token:', error);
         });
-
       return token;
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       session.userId = token.sub;
       session.firebaseToken = token.firebaseToken;
 
