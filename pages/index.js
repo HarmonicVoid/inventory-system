@@ -5,7 +5,11 @@ import { getSession, signOut, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { getAuth, signInWithCustomToken } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithCustomToken,
+  onAuthStateChanged,
+} from 'firebase/auth';
 import { Box } from '@mui/system';
 import { CircularProgress } from '@mui/material';
 
@@ -13,20 +17,7 @@ export default function Home() {
   const modelQueried = useRecoilValue(modelState);
   const [modelNames, setModelNames] = useState([]);
   const { data: session, status } = useSession();
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    return onSnapshot(
-      query(collection(db, 'iPhone Models'), orderBy('model')),
-      (snapshot) => {
-        setModelNames(
-          snapshot.docs.map((doc) => {
-            return { id: doc.id, ...doc.data() };
-          })
-        );
-      }
-    );
-  }, []);
+  const [user, setUser] = useState(false);
 
   const auth = getAuth();
 
@@ -40,6 +31,33 @@ export default function Home() {
       const errorMessage = error.message;
       signOut();
     });
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+
+      setUser(true);
+
+      // ...
+    } else {
+      // User is signed out]
+      // ...
+    }
+  });
+
+  useEffect(() => {
+    return onSnapshot(
+      query(collection(db, 'iPhone Models'), orderBy('model')),
+      (snapshot) => {
+        setModelNames(
+          snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+          })
+        );
+      }
+    );
+  }, [user]);
 
   return (
     <div className="pageContainer">
