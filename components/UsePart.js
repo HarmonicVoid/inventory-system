@@ -37,8 +37,6 @@ function UsePart() {
       ...doc.data(),
     }));
 
-    console.log(serialData);
-
     if (serialData.length == 0) {
       setNotify({
         isOpen: true,
@@ -91,7 +89,7 @@ function UsePart() {
     setErrors({
       ...temp,
     });
-    console.log(temp);
+
     return Object.values(temp).every((x) => x == '');
   };
 
