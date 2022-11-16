@@ -59,20 +59,23 @@ export default function Home() {
     );
   }, [user]);
 
-  return (
-    <div className="pageContainer">
-      <div className="InventoryTable">
-        {modelNames
+  if (session) {
+    return (
+      <div className="pageContainer">
+        <div className="InventoryTable">
+          {modelNames
 
-          .filter((item) =>
-            item.model.toLowerCase().includes(modelQueried.toLowerCase())
-          )
-          .map((item) => (
-            <InventoryTable key={item.id} model={[item.id, item.model]} />
-          ))}
+            .filter((item) =>
+              item.model.toLowerCase().includes(modelQueried.toLowerCase())
+            )
+            .map((item) => (
+              <InventoryTable key={item.id} model={[item.id, item.model]} />
+            ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  return <></>;
 }
 
 export async function getServerSideProps(context) {

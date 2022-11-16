@@ -731,204 +731,211 @@ function AddPart() {
     }
   };
 
-  return (
-    <div className="pageContainer">
-      <Card elevation={5}>
-        <Typography
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 6,
-            marginBottom: 5,
-            fontWeight: 'bold',
-          }}
-          variant="h4"
-        >
-          Part Information
-        </Typography>
+  if (session) {
+    return (
+      <div className="pageContainer">
+        <Card elevation={5}>
+          <Typography
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 6,
+              marginBottom: 5,
+              fontWeight: 'bold',
+            }}
+            variant="h4"
+          >
+            Part Information
+          </Typography>
 
-        <CardContent>
-          <form onSubmit={Submit} autoComplete="off">
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="flex-start"
-              rowSpacing={3}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '80%',
-                }}
+          <CardContent>
+            <form onSubmit={Submit} autoComplete="off">
+              <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-start"
+                rowSpacing={3}
               >
-                <MultiSelect
-                  label="Models"
-                  value={modelSelection}
-                  onChange={handleModelChange}
-                  options={modelsMenu}
-                  error={errors.multiId}
-                  name="multiId"
-                />
-
-                <Button
-                  onClick={() => {
-                    setModelsOpenPopup(true);
-                  }}
-                  sx={{ marginLeft: 1 }}
-                >
-                  NEW
-                </Button>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '80%',
-                  marginTop: 2,
-                }}
-              >
-                <Select
-                  name="partId"
-                  label="Parts"
-                  value={values.partId}
-                  onChange={handleInputChange}
-                  options={partsMenu}
-                  error={errors.partId}
-                />
-                <Button
-                  onClick={() => {
-                    setOpenUsePopup(true);
-                  }}
-                  sx={{ marginLeft: 1 }}
-                >
-                  NEW
-                </Button>
-              </Box>
-
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '80%',
-                  marginTop: 2,
-                }}
-              >
-                <TextInput
-                  name="serialNumber"
-                  value={values.serialNumber}
-                  onChange={handleInputChange}
-                  sx={{ width: '100%' }}
-                  label="Serial Number"
-                  error={errors.serialNumber}
-                  inputProps={{
-                    style: { textTransform: 'uppercase' },
-                  }}
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '80%',
-                  marginTop: 2,
-                }}
-              >
-                <TextInput
-                  name="partNumber"
-                  value={values.partNumber}
-                  onChange={handleInputChange}
-                  label="Part Number"
-                  inputProps={{ style: { textTransform: 'uppercase' } }}
-                  error={errors.partNumber}
+                <Box
                   sx={{
-                    marginRight: 2,
-                    width: '100%',
-                    color: 'white',
-                    '&:multilineColor': {
-                      color: 'red',
-                    },
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '80%',
                   }}
-                />
-
-                <TextInput
-                  name="deliveryNumber"
-                  value={values.deliveryNumber}
-                  onChange={handleInputChange}
-                  sx={{ width: '100%' }}
-                  label="Delivery Number"
-                  inputProps={{ style: { textTransform: 'uppercase' } }}
-                  error={errors.deliveryNumber}
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  width: '80%',
-                  marginTop: 3,
-                  marginBottom: 5,
-                }}
-              >
-                <Button
-                  disabled={loading ? true : false}
-                  variant="contained"
-                  type="submit"
                 >
-                  {loading ? 'SUBMITTING...' : 'SUBMIT'}
-                </Button>
-              </Box>
-            </Grid>
-          </form>
-        </CardContent>
-      </Card>
-      <Popup
-        title="Enter Part"
-        openPopup={openUsePopup}
-        setOpenPopup={setOpenUsePopup}
-      >
-        <TextInput
-          name="partName"
-          value={partName}
-          onChange={handlePartNameChange}
-          sx={{ width: '100%', marginTop: 1, marginBottom: 1 }}
-          error={errors.partName}
-          label="Name"
-          autoComplete="off"
-        />
-        <Button disabled={loading ? true : false} onClick={() => addPartName()}>
-          {loading ? 'SUBMITTING...' : 'ADD'}
-        </Button>
-      </Popup>
-      <Popup
-        title="Enter Model"
-        openPopup={openModelsPopup}
-        setOpenPopup={setModelsOpenPopup}
-      >
-        <TextInput
-          name="modelName"
-          value={modelName}
-          onChange={handleChange}
-          sx={{ width: '100%', marginTop: 1, marginBottom: 1 }}
-          error={errors.modelName}
-          label="Name"
-          autoComplete="off"
-        />
-        <Button
-          disabled={loading ? true : false}
-          onClick={() => addModelName()}
+                  <MultiSelect
+                    label="Models"
+                    value={modelSelection}
+                    onChange={handleModelChange}
+                    options={modelsMenu}
+                    error={errors.multiId}
+                    name="multiId"
+                  />
+
+                  <Button
+                    onClick={() => {
+                      setModelsOpenPopup(true);
+                    }}
+                    sx={{ marginLeft: 1 }}
+                  >
+                    NEW
+                  </Button>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '80%',
+                    marginTop: 2,
+                  }}
+                >
+                  <Select
+                    name="partId"
+                    label="Parts"
+                    value={values.partId}
+                    onChange={handleInputChange}
+                    options={partsMenu}
+                    error={errors.partId}
+                  />
+                  <Button
+                    onClick={() => {
+                      setOpenUsePopup(true);
+                    }}
+                    sx={{ marginLeft: 1 }}
+                  >
+                    NEW
+                  </Button>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '80%',
+                    marginTop: 2,
+                  }}
+                >
+                  <TextInput
+                    name="serialNumber"
+                    value={values.serialNumber}
+                    onChange={handleInputChange}
+                    sx={{ width: '100%' }}
+                    label="Serial Number"
+                    error={errors.serialNumber}
+                    inputProps={{
+                      style: { textTransform: 'uppercase' },
+                    }}
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '80%',
+                    marginTop: 2,
+                  }}
+                >
+                  <TextInput
+                    name="partNumber"
+                    value={values.partNumber}
+                    onChange={handleInputChange}
+                    label="Part Number"
+                    inputProps={{ style: { textTransform: 'uppercase' } }}
+                    error={errors.partNumber}
+                    sx={{
+                      marginRight: 2,
+                      width: '100%',
+                      color: 'white',
+                      '&:multilineColor': {
+                        color: 'red',
+                      },
+                    }}
+                  />
+
+                  <TextInput
+                    name="deliveryNumber"
+                    value={values.deliveryNumber}
+                    onChange={handleInputChange}
+                    sx={{ width: '100%' }}
+                    label="Delivery Number"
+                    inputProps={{ style: { textTransform: 'uppercase' } }}
+                    error={errors.deliveryNumber}
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    width: '80%',
+                    marginTop: 3,
+                    marginBottom: 5,
+                  }}
+                >
+                  <Button
+                    disabled={loading ? true : false}
+                    variant="contained"
+                    type="submit"
+                  >
+                    {loading ? 'SUBMITTING...' : 'SUBMIT'}
+                  </Button>
+                </Box>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+        <Popup
+          title="Enter Part"
+          openPopup={openUsePopup}
+          setOpenPopup={setOpenUsePopup}
         >
-          {loading ? 'SUBMITTING...' : 'ADD'}
-        </Button>
-      </Popup>
-      <Notifications notify={notify} setNotify={setNotify} />
-    </div>
-  );
+          <TextInput
+            name="partName"
+            value={partName}
+            onChange={handlePartNameChange}
+            sx={{ width: '100%', marginTop: 1, marginBottom: 1 }}
+            error={errors.partName}
+            label="Name"
+            autoComplete="off"
+          />
+          <Button
+            disabled={loading ? true : false}
+            onClick={() => addPartName()}
+          >
+            {loading ? 'SUBMITTING...' : 'ADD'}
+          </Button>
+        </Popup>
+        <Popup
+          title="Enter Model"
+          openPopup={openModelsPopup}
+          setOpenPopup={setModelsOpenPopup}
+        >
+          <TextInput
+            name="modelName"
+            value={modelName}
+            onChange={handleChange}
+            sx={{ width: '100%', marginTop: 1, marginBottom: 1 }}
+            error={errors.modelName}
+            label="Name"
+            autoComplete="off"
+          />
+          <Button
+            disabled={loading ? true : false}
+            onClick={() => addModelName()}
+          >
+            {loading ? 'SUBMITTING...' : 'ADD'}
+          </Button>
+        </Popup>
+        <Notifications notify={notify} setNotify={setNotify} />
+      </div>
+    );
+  }
+
+  return <></>;
 }
 
 export default AddPart;

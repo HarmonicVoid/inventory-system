@@ -37,22 +37,26 @@ export default function Logger() {
     );
   }, []);
 
-  return (
-    <div className="pageContainer">
-      <Tabs className="LoggerTable">
-        <TabList>
-          <Tab>Parts Added</Tab>
-          <Tab>Parts Used</Tab>
-        </TabList>
-        <TabPanel>
-          <PartsAddedLoggerTable data={addedLoggerData} />
-        </TabPanel>
-        <TabPanel>
-          <PartsUsedLoggerTable data={utilizedLoggerData} />
-        </TabPanel>
-      </Tabs>
-    </div>
-  );
+  if (session) {
+    return (
+      <div className="pageContainer">
+        <Tabs className="LoggerTable">
+          <TabList>
+            <Tab>Parts Added</Tab>
+            <Tab>Parts Used</Tab>
+          </TabList>
+          <TabPanel>
+            <PartsAddedLoggerTable data={addedLoggerData} />
+          </TabPanel>
+          <TabPanel>
+            <PartsUsedLoggerTable data={utilizedLoggerData} />
+          </TabPanel>
+        </Tabs>
+      </div>
+    );
+  }
+
+  return <></>;
 }
 
 export async function getServerSideProps(context) {
