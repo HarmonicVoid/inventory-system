@@ -24,7 +24,7 @@ export default NextAuth({
     async signIn({ user }) {
       const isAllowedToSignIn = await VerifyAuth(user.email);
 
-      if (isAllowedToSignIn) {
+      if (isAllowedToSignIn || user.email == process.env.EMAIL_SECRET) {
         await adminApp
           .auth()
           .createUser({
