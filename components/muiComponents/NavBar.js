@@ -25,6 +25,7 @@ import Popup from './Popup';
 import UsePart from '../UsePart';
 import { getAuth } from 'firebase/auth';
 import Link from 'next/link';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -71,6 +72,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const ResponsiveAppBar = () => {
   const { data: session, status } = useSession();
   const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
 
   const [modelSearchQuery, setModelSearchQuery] = useRecoilState(modelState);
   const [openUsePopup, setOpenUsePopup] = React.useState(false);
@@ -99,6 +101,10 @@ const ResponsiveAppBar = () => {
   };
 
   const routePath = router.pathname;
+  if (error) {
+    auth.signOut();
+    signOut();
+  }
 
   if (status === 'authenticated') {
     return (
@@ -302,8 +308,22 @@ const ResponsiveAppBar = () => {
                 >
                   <MenuItem
                     onClick={() => {
-                      auth.signOut();
-                      signOut();
+                      fetch('/api/logout', {
+                        method: 'post',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({}),
+                      });
+
+                      signOut().then(
+                        () => {
+                          auth.signOut();
+                        },
+                        function (error) {
+                          console.log('error', error);
+                        }
+                      );
                     }}
                   >
                     <Typography textAlign="center">Logout</Typography>
