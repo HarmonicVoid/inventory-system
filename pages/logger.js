@@ -5,11 +5,16 @@ import { getSession, signIn, useSession } from 'next-auth/react';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { db } from '../config/firebase';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function Logger() {
   const { data: session, status } = useSession();
   const [addedLoggerData, setAddedLoggerData] = useState([]);
   const [utilizedLoggerData, setUtilizedLoggerData] = useState([]);
+
+  const auth = getAuth();
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
     return onSnapshot(
@@ -22,7 +27,7 @@ export default function Logger() {
         );
       }
     );
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     return onSnapshot(
@@ -35,7 +40,7 @@ export default function Logger() {
         );
       }
     );
-  }, []);
+  }, [user]);
 
   if (session) {
     return (
