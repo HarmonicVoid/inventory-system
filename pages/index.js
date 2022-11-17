@@ -5,46 +5,16 @@ import { getSession, signOut, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import {
-  getAuth,
-  signInWithCustomToken,
-  onAuthStateChanged,
-} from 'firebase/auth';
-import { Box } from '@mui/system';
-import { CircularProgress } from '@mui/material';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function Home() {
   const modelQueried = useRecoilValue(modelState);
   const [modelNames, setModelNames] = useState([]);
   const { data: session, status } = useSession();
-  const [user, setUser] = useState(false);
 
   const auth = getAuth();
-
-  signInWithCustomToken(auth, session.firebaseToken)
-    .then((userCredential) => {
-      // Signed in
-      // setUser(userCredential.user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      signOut();
-    });
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-
-      setUser(true);
-
-      // ...
-    } else {
-      // User is signed out]
-      // ...
-    }
-  });
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
     return onSnapshot(
