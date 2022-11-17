@@ -109,7 +109,20 @@ function SignIn({ providers }) {
           </Card>
         </div>
       ) : (
-        <></>
+        <>
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress thickness={5} size="70px" />
+            <h3>authenticating...</h3>
+          </Box>
+        </>
       )}
     </>
   );
