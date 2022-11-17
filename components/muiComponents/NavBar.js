@@ -215,26 +215,25 @@ const ResponsiveAppBar = () => {
                 </Tooltip>
 
                 <Tooltip title="Part history">
-                  <Button
-                    sx={{
-                      color: 'white',
-                      display: 'block',
-                      '&:hover': { backgroundColor: '#455A64' },
-                    }}
-                    onClick={() => {
-                      router.push('/logger', undefined, { shallow: true });
-                    }}
-                  >
-                    <HistoryIcon
+                  <Link href="/logger">
+                    <Button
                       sx={{
                         color: 'white',
-                        '&:hover': {
-                          color: 'white',
-                        },
-                        fontSize: '2rem',
+                        display: 'block',
+                        '&:hover': { backgroundColor: '#455A64' },
                       }}
-                    />
-                  </Button>
+                    >
+                      <HistoryIcon
+                        sx={{
+                          color: 'white',
+                          '&:hover': {
+                            color: 'white',
+                          },
+                          fontSize: '2rem',
+                        }}
+                      />
+                    </Button>
+                  </Link>
                 </Tooltip>
 
                 <Tooltip title="Utilize Part">
