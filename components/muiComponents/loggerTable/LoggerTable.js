@@ -343,7 +343,7 @@ export default function MyTable({ data }) {
                     }}
                     align="center"
                   >
-                    {item.removedBy}
+                    {item.removedBy || item.addedBy}
                   </StyledTableCell>
 
                   <StyledTableCell
