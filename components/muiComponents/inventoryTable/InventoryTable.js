@@ -228,8 +228,8 @@ function InventoryTable({ model }) {
             </Search>
           </Box>
         </Card>
-        <TableContainer sx={{ padding: 1, height: '100%' }}>
-          <TableStyled>
+        <TableContainer sx={{ marginTop: 1, height: '100%' }}>
+          <TableStyled sx={{ padding: 1 }}>
             <TableHead
               sx={{
                 '&.MuiTableHead-root': {
