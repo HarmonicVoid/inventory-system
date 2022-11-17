@@ -8,10 +8,12 @@ import { Button, Card, CardContent, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getAuth, signInWithCustomToken } from 'firebase/auth';
 
 function SignIn({ providers }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const auth = getAuth();
 
   if (status === 'loading') {
     return (
@@ -30,6 +32,26 @@ function SignIn({ providers }) {
   }
 
   if (status === 'authenticated') {
+    signInWithCustomToken(auth, session.firebaseToken)
+      .then((userCredential) => {
+        // console.log(userCredential);
+        // Signed in
+        fetch('/api/login', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            token: userCredential.user.accessToken,
+          }),
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        signOut();
+      });
+
     router.push('/');
   }
 
@@ -68,15 +90,15 @@ function SignIn({ providers }) {
                   <div key={provider.name}>
                     <Button
                       variant="contained"
-                      onClick={() =>
+                      onClick={() => {
                         SignIntoProvider(provider.id, {
                           callbackUrl: `${
                             router.query.callbackUrl
                               ? router.query.callbackUrl
-                              : window.location.origin
+                              : '/signin'
                           }`,
-                        })
-                      }
+                        });
+                      }}
                     >
                       Sign in
                     </Button>
