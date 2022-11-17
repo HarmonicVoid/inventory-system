@@ -15,22 +15,6 @@ function SignIn({ providers }) {
   const router = useRouter();
   const auth = getAuth();
 
-  if (status === 'loading') {
-    return (
-      <Box
-        sx={{
-          width: '100%',
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <CircularProgress thickness={5} size="70px" />
-      </Box>
-    );
-  }
-
   if (status === 'authenticated') {
     signInWithCustomToken(auth, session.firebaseToken)
       .then((userCredential) => {
@@ -57,7 +41,22 @@ function SignIn({ providers }) {
 
   return (
     <>
-      {!session ? (
+      {session ? (
+        <>
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress thickness={5} size="70px" />
+            <h3>authenticating...</h3>
+          </Box>
+        </>
+      ) : (
         <div className="pageContainer">
           <Card
             sx={{
@@ -108,21 +107,6 @@ function SignIn({ providers }) {
             </CardContent>
           </Card>
         </div>
-      ) : (
-        <>
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress thickness={5} size="70px" />
-            <h3>authenticating...</h3>
-          </Box>
-        </>
       )}
     </>
   );
