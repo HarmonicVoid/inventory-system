@@ -20,8 +20,8 @@ export default function handler(req, res) {
             path: '/',
           })
         );
-        res.statusCode = 200;
-        res.json({ success: true });
       });
+    res.statusCode = 200;
+    res.json({ success: true });
   }
 }
