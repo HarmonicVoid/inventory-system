@@ -4,7 +4,10 @@ import {
   useSession,
   signIn as SignIntoProvider,
 } from 'next-auth/react';
-import { Button, Card, CardContent, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import Card from '@mui/material/Card';
+import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -39,23 +42,37 @@ function SignIn({ providers }) {
     router.push('/');
   }
 
+  if (status === 'loading') {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress thickness={3} size="70px" />
+      </Box>
+    );
+  }
+
   return (
     <>
       {session ? (
-        <>
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress thickness={5} size="70px" />
-            <h3>authenticating...</h3>
-          </Box>
-        </>
+        <Box
+          sx={{
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress thickness={3} size="70px" />
+          <h3>authenticating...</h3>
+        </Box>
       ) : (
         <div className="pageContainer">
           <Card

@@ -15,15 +15,13 @@ import TableRow from '@mui/material/TableRow';
 import Counter from '../Counter';
 import ConfirmDialog from '../ConfirmDialog';
 import Notifications from '../Notification';
+import Typography from '@mui/material/Typography';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import TablePagination from '@mui/material/TablePagination';
+import TableHead from '@mui/material/TableHead';
+import CircularProgress from '@mui/material/CircularProgress';
 import { collection, onSnapshot, query } from '@firebase/firestore';
 import { db } from '../../../config/firebase';
-import {
-  CircularProgress,
-  TableHead,
-  TablePagination,
-  TableSortLabel,
-  Typography,
-} from '@mui/material';
 
 const headCells = [
   { id: 'id', label: 'Part' },
@@ -171,7 +169,7 @@ function InventoryTable({ model }) {
           alignItems: 'center',
         }}
       >
-        <CircularProgress thickness={5} size="70px" />
+        <CircularProgress thickness={3} size="70px" />
       </Box>
     );
   }
@@ -419,8 +417,8 @@ function InventoryTable({ model }) {
   );
 }
 
-const MainPostTopicComponent = React.memo(InventoryTable);
-export default MainPostTopicComponent;
+// const MainPostTopicComponent = React.memo(InventoryTable);
+export default InventoryTable;
 
 {
   /* <TextInput
