@@ -33,7 +33,6 @@ function SignIn({ providers }) {
             token: userCredential.user.accessToken,
           }),
         }).then((response) => {
-          console.log(response);
           if (response.status == 200) {
             router.push('/');
           }
