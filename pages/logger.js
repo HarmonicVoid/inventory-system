@@ -66,11 +66,19 @@ export default function Logger() {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  let cookies = context.req.cookies;
 
   if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/signin',
+        permanent: false,
+      },
+    };
+  } else if (session && cookies.token == undefined) {
+    return {
+      redirect: {
+        destination: '/notAuthorized',
         permanent: false,
       },
     };

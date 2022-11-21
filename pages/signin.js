@@ -32,6 +32,11 @@ function SignIn({ providers }) {
           body: JSON.stringify({
             token: userCredential.user.accessToken,
           }),
+        }).then((response) => {
+          console.log(response);
+          if (response.status == 200) {
+            router.push('/');
+          }
         });
       })
       .catch((error) => {
@@ -39,8 +44,6 @@ function SignIn({ providers }) {
         const errorMessage = error.message;
         signOut();
       });
-
-    router.push('/');
   }
 
   if (status === 'loading') {
@@ -71,7 +74,7 @@ function SignIn({ providers }) {
             alignItems: 'center',
           }}
         >
-          <CircularProgress thickness={3} size="70px" />
+          <CircularProgress sx={{ marginRight: 2 }} thickness={3} size="70px" />
           <h3>authenticating...</h3>
         </Box>
       ) : (
