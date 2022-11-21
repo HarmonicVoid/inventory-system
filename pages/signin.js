@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   getProviders,
   useSession,
@@ -17,6 +17,7 @@ function SignIn({ providers }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const auth = getAuth();
+  const [loading, setLoading] = useState(false);
 
   if (status === 'authenticated') {
     signInWithCustomToken(auth, session.firebaseToken)
@@ -105,8 +106,10 @@ function SignIn({ providers }) {
                 {Object.values(providers).map((provider) => (
                   <div key={provider.name}>
                     <Button
+                      disabled={loading ? true : false}
                       variant="contained"
                       onClick={() => {
+                        setLoading(true);
                         SignIntoProvider(provider.id, {
                           callbackUrl: `${
                             router.query.callbackUrl
@@ -116,7 +119,7 @@ function SignIn({ providers }) {
                         });
                       }}
                     >
-                      Sign in
+                      {loading ? 'REDIRECTING...' : 'SIGN IN'}
                     </Button>
                   </div>
                 ))}
