@@ -18,77 +18,110 @@ import {
 import { db } from '/config/firebase';
 
 export async function CheckSerialNumber(data) {
-  const serialQuery = query(
-    collectionGroup(db, 'Serial Numbers'),
-    where('serialNumber', '==', data)
-  );
-  const querySerialNumber = await getDocs(serialQuery);
+  try {
+    const serialQuery = query(
+      collectionGroup(db, 'Serial Numbers'),
+      where('serialNumber', '==', data)
+    );
+    const querySerialNumber = await getDocs(serialQuery);
 
-  const serialData = querySerialNumber.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+    const serialData = querySerialNumber.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-  return serialData;
+    return serialData;
+  } catch (e) {
+    console.log('Error checking serial: ', e);
+  }
 }
 
 export async function CheckModelInDb(data) {
-  const q = query(collection(db, 'iPhone Models'), where('model', '==', data));
+  try {
+    const q = query(
+      collection(db, 'iPhone Models'),
+      where('model', '==', data)
+    );
 
-  const queryModelSnapshot = await getDocs(q);
+    const queryModelSnapshot = await getDocs(q);
 
-  const modelData = queryModelSnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  return modelData;
+    const modelData = queryModelSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return modelData;
+  } catch (e) {
+    console.log('Error checking model: ', e);
+  }
 }
 
 export async function CheckPartNumber(partNumberValue) {
-  const partNumberDocRef = query(
-    collectionGroup(db, 'Parts'),
-    where('partNumber', '==', partNumberValue)
-  );
-  const queryPartNumber = await getDocs(partNumberDocRef);
+  try {
+    const partNumberDocRef = query(
+      collectionGroup(db, 'Parts'),
+      where('partNumber', '==', partNumberValue)
+    );
+    const queryPartNumber = await getDocs(partNumberDocRef);
 
-  const partNumberData = queryPartNumber.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+    const partNumberData = queryPartNumber.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-  return partNumberData;
+    return partNumberData;
+  } catch (e) {
+    console.log('Error checking part number: ', e);
+  }
 }
 
 export async function CheckPartName(modelSelected, partName) {
-  const partNameQuery = query(
-    collection(db, 'iPhone Models', modelSelected, 'Parts'),
-    where('partName', '==', partName)
-  );
+  try {
+    const partNameQuery = query(
+      collection(db, 'iPhone Models', modelSelected, 'Parts'),
+      where('partName', '==', partName)
+    );
 
-  const queryPartName = await getDocs(partNameQuery);
-  const partNameData = queryPartName.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+    const queryPartName = await getDocs(partNameQuery);
+    const partNameData = queryPartName.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-  return partNameData;
+    return partNameData;
+  } catch (e) {
+    console.log('Error checking part name: ', e);
+  }
 }
 
 export async function CheckSharedPartStatus(modelId, partNumberId) {
-  const docSharedRef = doc(db, 'iPhone Models', modelId, 'Parts', partNumberId);
-  const docShared = await getDoc(docSharedRef);
+  try {
+    const docSharedRef = doc(
+      db,
+      'iPhone Models',
+      modelId,
+      'Parts',
+      partNumberId
+    );
+    const docShared = await getDoc(docSharedRef);
 
-  const partData = docShared.data();
+    const partData = docShared.data();
 
-  return partData.sharedPartNumber;
+    return partData.sharedPartNumber;
+  } catch (e) {
+    console.log('Error checking shared part status: ', e);
+  }
 }
 
 export async function CreateNewModel(modelSelected) {
-  const modelDocRef = await addDoc(collection(db, 'iPhone Models'), {
-    model: modelSelected,
-  });
+  try {
+    const modelDocRef = await addDoc(collection(db, 'iPhone Models'), {
+      model: modelSelected,
+    });
 
-  return modelDocRef;
+    return modelDocRef;
+  } catch (e) {
+    console.log('Error creating new model: ', e);
+  }
 }
 
 export async function CreateNewPart(
@@ -103,21 +136,25 @@ export async function CreateNewPart(
     sharedValue = true;
   }
 
-  const partDocRef = await addDoc(
-    collection(db, 'iPhone Models', modelId, 'Parts'),
-    {
-      partName: partName,
-      partNumber: partNumber,
-      model: modelSelected,
-      stock: 0,
-      reserved: 0,
-      available: 0,
-      sharedPartNumber: sharedValue,
-      modelId: modelId,
-    }
-  );
+  try {
+    const partDocRef = await addDoc(
+      collection(db, 'iPhone Models', modelId, 'Parts'),
+      {
+        partName: partName,
+        partNumber: partNumber,
+        model: modelSelected,
+        stock: 0,
+        reserved: 0,
+        available: 0,
+        sharedPartNumber: sharedValue,
+        modelId: modelId,
+      }
+    );
 
-  return partDocRef;
+    return partDocRef;
+  } catch (e) {
+    console.log('Error creating new part: ', e);
+  }
 }
 
 export async function AddSerial(
@@ -130,66 +167,56 @@ export async function AddSerial(
   partNumber,
   modelSelected
 ) {
-  await addDoc(
-    collection(db, 'iPhone Models', modelId, 'Parts', partId, 'Serial Numbers'),
-    {
+  try {
+    await addDoc(
+      collection(
+        db,
+        'iPhone Models',
+        modelId,
+        'Parts',
+        partId,
+        'Serial Numbers'
+      ),
+      {
+        timestamp: serverTimestamp(),
+        deliveryNumber: deliveryNumber,
+        user: userName,
+        serialNumber: serialNumber,
+        partName: partName,
+        partNumber: partNumber,
+        model: modelSelected,
+        modelId: modelId,
+      }
+    );
+
+    //logger
+
+    await addDoc(collection(db, 'Parts Added Logger'), {
       timestamp: serverTimestamp(),
       deliveryNumber: deliveryNumber,
-      user: userName,
+      addedBy: userName,
       serialNumber: serialNumber,
       partName: partName,
       partNumber: partNumber,
       model: modelSelected,
-      modelId: modelId,
-    }
-  );
-
-  //logger
-
-  await addDoc(collection(db, 'Parts Added Logger'), {
-    timestamp: serverTimestamp(),
-    deliveryNumber: deliveryNumber,
-    addedBy: userName,
-    serialNumber: serialNumber,
-    partName: partName,
-    partNumber: partNumber,
-    model: modelSelected,
-  });
+    });
+  } catch (e) {
+    console.log('Error adding serial number: ', e);
+  }
 }
 
 export async function UpdateStock(modelId, partId, partNumber) {
   const stock = [];
   const partsData = await CheckPartNumber(partNumber);
 
-  const subCollectionSnapshot = await getDocs(
-    collection(db, 'iPhone Models', modelId, 'Parts', partId, 'Serial Numbers')
-  );
-  subCollectionSnapshot.forEach((docs) => {
-    stock.push(docs.data());
-  });
-
-  await updateDoc(doc(db, 'iPhone Models', modelId, 'Parts', partId), {
-    stock: stock.length,
-    available: stock.length - partsData[0].reserved,
-  });
-}
-
-export async function RemoveSerialNumber(
-  serialData,
-  user,
-  serialNumbersDocRef
-) {
-  for (let i = 0; i < serialData.length; i++) {
-    const stock = [];
-    const partsData = await CheckPartNumber(serialData[i].partNumber);
-    //Updating stock
+  try {
     const subCollectionSnapshot = await getDocs(
       collection(
         db,
         'iPhone Models',
-        partsData[i].modelId,
+        modelId,
         'Parts',
-        partsData[i].id,
+        partId,
         'Serial Numbers'
       )
     );
@@ -197,51 +224,87 @@ export async function RemoveSerialNumber(
       stock.push(docs.data());
     });
 
-    if (partsData[i].reserved != 0) {
-      await updateDoc(
-        doc(
+    await updateDoc(doc(db, 'iPhone Models', modelId, 'Parts', partId), {
+      stock: stock.length,
+      available: stock.length - partsData[0].reserved,
+    });
+  } catch (e) {
+    console.log('Error updating stock: ', e);
+  }
+}
+
+export async function RemoveSerialNumber(
+  serialData,
+  user,
+  serialNumbersDocRef
+) {
+  try {
+    for (let i = 0; i < serialData.length; i++) {
+      const stock = [];
+      const partsData = await CheckPartNumber(serialData[i].partNumber);
+      //Updating stock
+      const subCollectionSnapshot = await getDocs(
+        collection(
           db,
           'iPhone Models',
           partsData[i].modelId,
           'Parts',
-          partsData[i].id
-        ),
-        {
-          stock: stock.length - 1,
-          reserved: partsData[i].reserved - 1,
-          available: stock.length - partsData[i].reserved,
-        }
+          partsData[i].id,
+          'Serial Numbers'
+        )
       );
-    } else if (partsData[i].reserved == 0) {
-      await updateDoc(
-        doc(
-          db,
-          'iPhone Models',
-          partsData[i].modelId,
-          'Parts',
-          partsData[i].id
-        ),
-        {
-          stock: stock.length - 1,
-          available: stock.length - 1,
-        }
-      );
+      subCollectionSnapshot.forEach((docs) => {
+        stock.push(docs.data());
+      });
+
+      if (partsData[i].reserved != 0) {
+        await updateDoc(
+          doc(
+            db,
+            'iPhone Models',
+            partsData[i].modelId,
+            'Parts',
+            partsData[i].id
+          ),
+          {
+            stock: stock.length - 1,
+            reserved: partsData[i].reserved - 1,
+            available: stock.length - partsData[i].reserved,
+          }
+        );
+      } else if (partsData[i].reserved == 0) {
+        await updateDoc(
+          doc(
+            db,
+            'iPhone Models',
+            partsData[i].modelId,
+            'Parts',
+            partsData[i].id
+          ),
+          {
+            stock: stock.length - 1,
+            available: stock.length - 1,
+          }
+        );
+      }
+
+      //logger
+      await addDoc(collection(db, 'Parts Used Logger'), {
+        timestamp: serverTimestamp(),
+        deliveryNumber: serialData[i].deliveryNumber,
+        removedBy: user,
+        serialNumber: serialData[i].serialNumber,
+        partName: partsData[i].partName,
+        partNumber: partsData[i].partNumber,
+        model: partsData[i].model,
+      });
     }
 
-    //logger
-    await addDoc(collection(db, 'Parts Used Logger'), {
-      timestamp: serverTimestamp(),
-      deliveryNumber: serialData[i].deliveryNumber,
-      removedBy: user,
-      serialNumber: serialData[i].serialNumber,
-      partName: partsData[i].partName,
-      partNumber: partsData[i].partNumber,
-      model: partsData[i].model,
+    //Removing docs that match serial number
+    serialNumbersDocRef.forEach((doc) => {
+      deleteDoc(doc.ref);
     });
+  } catch (e) {
+    console.log('Error removing serial number: ', e);
   }
-
-  //Removing docs that match serial number
-  serialNumbersDocRef.forEach((doc) => {
-    deleteDoc(doc.ref);
-  });
 }
