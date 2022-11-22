@@ -734,7 +734,7 @@ function AddPart() {
   if (session) {
     return (
       <div className="pageContainer">
-        <Card elevation={5} sx={{ margin: 3 }}>
+        <Card elevation={5} sx={{ margin: 2, width: '900px' }}>
           <Typography
             sx={{
               display: 'flex',
