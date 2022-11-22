@@ -68,19 +68,25 @@ export default NextAuth({
 });
 
 const VerifyAuth = async (email) => {
-  const accountQuery = query(
-    collection(db, 'authUsers'),
-    where('email', '==', email)
-  );
-  const queryAccountDocs = await getDocs(accountQuery);
-  const accountData = queryAccountDocs.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  try {
+    const accountQuery = query(
+      collection(db, 'authUsers'),
+      where('email', '==', email)
+    );
+    const queryAccountDocs = await getDocs(accountQuery);
+    const accountData = queryAccountDocs.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-  if (accountData.length == 0) {
+    if (accountData.length == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (e) {
+    console.log('Error getting  document:', e);
+
     return false;
-  } else {
-    return true;
   }
 };
