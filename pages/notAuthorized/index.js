@@ -1,7 +1,9 @@
 import React from 'react';
 import { getSession, signOut } from 'next-auth/react';
 import { getAuth } from 'firebase/auth';
-import { Button, Grid, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 function NotAuthorized() {
   const auth = getAuth();
