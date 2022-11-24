@@ -45,7 +45,8 @@ export default NextAuth({
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       const additionalClaims = {
-        isAdmin: false,
+        isAdmin: true,
+        location: '0000547264',
       };
       await adminApp
         .auth()
