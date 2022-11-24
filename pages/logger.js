@@ -54,7 +54,7 @@ export default function Logger() {
             <PartsAddedLoggerTable data={addedLoggerData} />
           </TabPanel>
           <TabPanel>
-            <PartsUsedLoggerTable data={utilizedLoggerData} />
+            <PartsUsedLoggerTable data={utilizedLoggerData} isUsed={true} />
           </TabPanel>
         </Tabs>
       </div>
