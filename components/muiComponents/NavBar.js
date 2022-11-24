@@ -75,6 +75,14 @@ const ResponsiveAppBar = () => {
   const [user, loading, error] = useAuthState(auth);
 
   if (error) {
+    fetch('/api/logout', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
     auth.signOut();
     signOut();
   }
