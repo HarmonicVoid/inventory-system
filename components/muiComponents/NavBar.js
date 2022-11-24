@@ -74,6 +74,11 @@ const ResponsiveAppBar = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
 
+  if (error) {
+    auth.signOut();
+    signOut();
+  }
+
   const [modelSearchQuery, setModelSearchQuery] = useRecoilState(modelState);
   const [openUsePopup, setOpenUsePopup] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -96,15 +101,9 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
-  const blurHandler = () => {
-    console.log('input blurred');
-  };
+  const blurHandler = () => {};
 
   const routePath = router.pathname;
-  if (error) {
-    auth.signOut();
-    signOut();
-  }
 
   if (status === 'authenticated') {
     return (
