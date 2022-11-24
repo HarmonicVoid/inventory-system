@@ -191,8 +191,8 @@ const ResponsiveAppBar = () => {
               </div>
 
               <div className="NavBarMenuIcons">
-                <Tooltip title="Add Part">
-                  <Link href="/addpart">
+                <Link href="/addpart">
+                  <Tooltip title="Add Part">
                     <Button
                       sx={{
                         color: 'white',
@@ -210,11 +210,11 @@ const ResponsiveAppBar = () => {
                         }}
                       />
                     </Button>
-                  </Link>
-                </Tooltip>
+                  </Tooltip>
+                </Link>
 
-                <Tooltip title="Part history">
-                  <Link href="/logger">
+                <Link href="/logger">
+                  <Tooltip title="Part history">
                     <Button
                       sx={{
                         color: 'white',
@@ -232,8 +232,8 @@ const ResponsiveAppBar = () => {
                         }}
                       />
                     </Button>
-                  </Link>
-                </Tooltip>
+                  </Tooltip>
+                </Link>
 
                 <Tooltip title="Utilize Part">
                   <Button
