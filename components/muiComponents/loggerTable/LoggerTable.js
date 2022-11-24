@@ -15,6 +15,8 @@ import Card from '@mui/material/Card';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { TableHead, Typography } from '@mui/material';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const headCells = [
   {
@@ -37,10 +39,20 @@ const headCells = [
   },
 ];
 
-export default function MyTable({ data }) {
+export default function MyTable({ data, isUsed }) {
   const [order, setOrder] = useState();
   const [orderBy, setOrderBy] = useState();
   const [partsData, setPartsData] = useState([]);
+
+  const auth = getAuth();
+  const [user, loading] = useAuthState(auth);
+
+  if (user) {
+    user.getIdTokenResult().then((tokenResult) => {
+      user.admin = tokenResult.claims.isAdmin;
+      user.location = tokenResult.claims.location;
+    });
+  }
 
   useEffect(() => {
     return setPartsData(data);
@@ -224,6 +236,12 @@ export default function MyTable({ data }) {
                 </StyledTableCell>
                 <StyledTableCell
                   sortDirection={orderBy === headCells[4].id ? order : false}
+                  sx={{
+                    display:
+                      isUsed || (user != null && user.admin) ? '' : 'none',
+                  }}
+
+                  // sx={{ display: user != null && user.admin ? '' : 'none' }}
                 >
                   <Box
                     sx={{
@@ -330,6 +348,8 @@ export default function MyTable({ data }) {
                     sx={{
                       fontSize: '1.4rem',
                       padding: '2px',
+                      display:
+                        (user != null && user.admin) || isUsed ? '' : 'none',
                     }}
                     align="center"
                   >
