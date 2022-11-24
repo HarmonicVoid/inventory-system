@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getAuth, signInWithCustomToken } from 'firebase/auth';
+import { signOut } from 'next-auth/react';
 
 function SignIn({ providers }) {
   const { data: session, status } = useSession();
@@ -22,7 +23,6 @@ function SignIn({ providers }) {
   if (status === 'authenticated') {
     signInWithCustomToken(auth, session.firebaseToken)
       .then((userCredential) => {
-        // console.log(userCredential);
         // Signed in
         fetch('/api/login', {
           method: 'post',
