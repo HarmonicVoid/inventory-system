@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { modelState } from '../atoms/modelSearchAtom';
-import { getSession, signOut, useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import InventoryTable from '../components/muiComponents/inventoryTable/InventoryTable';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
