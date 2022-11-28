@@ -52,6 +52,8 @@ export async function CheckModelInDb(data) {
     return modelData;
   } catch (e) {
     console.log('Error checking model: ', e);
+
+    return 'error';
   }
 }
 
@@ -71,6 +73,7 @@ export async function CheckPartNumber(partNumberValue) {
     return partNumberData;
   } catch (e) {
     console.log('Error checking part number: ', e);
+    return 'error';
   }
 }
 
@@ -90,6 +93,7 @@ export async function CheckPartName(modelSelected, partName) {
     return partNameData;
   } catch (e) {
     console.log('Error checking part name: ', e);
+    return 'error';
   }
 }
 
@@ -109,6 +113,7 @@ export async function CheckSharedPartStatus(modelId, partNumberId) {
     return partData.sharedPartNumber;
   } catch (e) {
     console.log('Error checking shared part status: ', e);
+    return 'error';
   }
 }
 
@@ -121,6 +126,8 @@ export async function CreateNewModel(modelSelected) {
     return modelDocRef;
   } catch (e) {
     console.log('Error creating new model: ', e);
+
+    return 'error';
   }
 }
 
@@ -154,6 +161,7 @@ export async function CreateNewPart(
     return partDocRef;
   } catch (e) {
     console.log('Error creating new part: ', e);
+    return 'error';
   }
 }
 
@@ -202,6 +210,8 @@ export async function AddSerial(
     });
   } catch (e) {
     console.log('Error adding serial number: ', e);
+
+    return 'error';
   }
 }
 

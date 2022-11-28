@@ -40,7 +40,7 @@ function AddPart() {
   const [partsMenu, setPartsMenu] = useState([]);
   const [openUsePopup, setOpenUsePopup] = useState(false);
   const [openModelsPopup, setModelsOpenPopup] = useState(false);
-  const [modelSelection, setModelSelection] = React.useState([]);
+  const [modelSelection, setModelSelection] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
     message: '',
@@ -159,12 +159,28 @@ function AddPart() {
         model1[0].id,
         values.partId
       );
+    } else if (model1 == 'error') {
+      setNotify({
+        isOpen: true,
+        message: 'An error occurred: 412',
+        type: 'error',
+      });
+
+      setLoading(false);
     }
     if (model2.length != 0) {
       partNameDataModel2 = await partService.CheckPartName(
         model2[0].id,
         values.partId
       );
+    } else if (model2 == 'error') {
+      setNotify({
+        isOpen: true,
+        message: 'An error occurred: 413',
+        type: 'error',
+      });
+
+      setLoading(false);
     }
 
     if (model1.length == 0 && model2.length == 0) {
@@ -226,6 +242,14 @@ function AddPart() {
             }
           }
         }
+      } else if (partNumberData == 'error') {
+        setNotify({
+          isOpen: true,
+          message: 'An error occurred: 414',
+          type: 'error',
+        });
+
+        setLoading(false);
       }
     } else if (
       (model1.length != 0 &&
@@ -262,44 +286,57 @@ function AddPart() {
       } else if (partNumberData.length == 0) {
         for (let i = 0; i < modelSelection.length; i++) {
           const model = await partService.CheckModelInDb(modelSelection[i]);
-          const newPartModelDocRef = await partService.CreateNewPart(
-            values.partId,
-            values.partNumber,
-            [modelSelection[0], modelSelection[1]],
-            model[0].id
-          );
 
-          await partService.AddSerial(
-            model[0].id,
-            newPartModelDocRef.id,
-            values.deliveryNumber,
-            session.user.name,
-            values.serialNumber,
-            values.partId,
-            values.partNumber,
-            [modelSelection[0], modelSelection[1]]
-          );
+          if (model != 'error') {
+            const newPartModelDocRef = await partService.CreateNewPart(
+              values.partId,
+              values.partNumber,
+              [modelSelection[0], modelSelection[1]],
+              model[0].id
+            );
 
-          await partService.UpdateStock(
-            model[0].id,
-            newPartModelDocRef.id,
-            values.partNumber
-          );
+            if (newPartModelDocRef != 'error') {
+              await partService.AddSerial(
+                model[0].id,
+                newPartModelDocRef.id,
+                values.deliveryNumber,
+                session.user.name,
+                values.serialNumber,
+                values.partId,
+                values.partNumber,
+                [modelSelection[0], modelSelection[1]]
+              );
 
-          if (i == 1) {
-            if (setLoading != false) {
-              setNotify({
-                isOpen: true,
-                message: 'Added successfully!',
-                type: 'success',
-              });
+              await partService.UpdateStock(
+                model[0].id,
+                newPartModelDocRef.id,
+                values.partNumber
+              );
 
-              resetForm();
-              setModelSelection([]);
-              setLoading(false);
+              if (i == 1) {
+                if (setLoading != false) {
+                  setNotify({
+                    isOpen: true,
+                    message: 'Added successfully!',
+                    type: 'success',
+                  });
+
+                  resetForm();
+                  setModelSelection([]);
+                  setLoading(false);
+                }
+              }
             }
           }
         }
+      } else if (partNumberData == 'error') {
+        setNotify({
+          isOpen: true,
+          message: 'An error occurred: 415',
+          type: 'error',
+        });
+
+        setLoading(false);
       }
     } else if (
       model1.length != 0 &&
@@ -314,48 +351,52 @@ function AddPart() {
         //Adds one to the part stock for both models
         for (let i = 0; i < modelSelection.length; i++) {
           const model = await partService.CheckModelInDb(modelSelection[i]);
-          const partNameDataMode = await partService.CheckPartName(
-            model[0].id,
-            values.partId
-          );
-
-          if (values.partNumber != partNameDataMode[0].partNumber) {
-            setNotify({
-              isOpen: true,
-              message: 'Part number does not match',
-              type: 'error',
-            });
-            setLoading(false);
-          } else if (values.partNumber == partNameDataMode[0].partNumber) {
-            //adding serial for model1 part
-            await partService.AddSerial(
+          if (model != 'error') {
+            const partNameDataMode = await partService.CheckPartName(
               model[0].id,
-              partNameDataMode[0].id,
-              values.deliveryNumber,
-              session.user.name,
-              values.serialNumber,
-              values.partId,
-              values.partNumber,
-              [modelSelection[0], modelSelection[1]]
+              values.partId
             );
 
-            await partService.UpdateStock(
-              model[0].id,
-              partNameDataMode[0].id,
-              values.partNumber
-            );
-
-            if (i == 1) {
-              if (setLoading != false) {
+            if (partNameDataMode != 'error') {
+              if (values.partNumber != partNameDataMode[0].partNumber) {
                 setNotify({
                   isOpen: true,
-                  message: 'Added successfully!',
-                  type: 'success',
+                  message: 'Part number does not match',
+                  type: 'error',
                 });
-
-                resetForm();
-                setModelSelection([]);
                 setLoading(false);
+              } else if (values.partNumber == partNameDataMode[0].partNumber) {
+                //adding serial for model1 part
+                await partService.AddSerial(
+                  model[0].id,
+                  partNameDataMode[0].id,
+                  values.deliveryNumber,
+                  session.user.name,
+                  values.serialNumber,
+                  values.partId,
+                  values.partNumber,
+                  [modelSelection[0], modelSelection[1]]
+                );
+
+                await partService.UpdateStock(
+                  model[0].id,
+                  partNameDataMode[0].id,
+                  values.partNumber
+                );
+
+                if (i == 1) {
+                  if (setLoading != false) {
+                    setNotify({
+                      isOpen: true,
+                      message: 'Added successfully!',
+                      type: 'success',
+                    });
+
+                    resetForm();
+                    setModelSelection([]);
+                    setLoading(false);
+                  }
+                }
               }
             }
           }
@@ -440,45 +481,47 @@ function AddPart() {
           newModel1Ref = await partService.CreateNewModel(modelSelection[0]);
         }
 
-        for (let i = 0; i < modelSelection.length; i++) {
-          model = await partService.CheckModelInDb(modelSelection[i]);
+        if (newModel1Ref != 'error' || newModel2Ref != 'error') {
+          for (let i = 0; i < modelSelection.length; i++) {
+            model = await partService.CheckModelInDb(modelSelection[i]);
 
-          const newPartModelDocRef = await partService.CreateNewPart(
-            values.partId,
-            values.partNumber,
-            [modelSelection[0], modelSelection[1]],
-            model[0].id
-          );
+            const newPartModelDocRef = await partService.CreateNewPart(
+              values.partId,
+              values.partNumber,
+              [modelSelection[0], modelSelection[1]],
+              model[0].id
+            );
 
-          //adding serial for model1 part
-          await partService.AddSerial(
-            model[0].id,
-            newPartModelDocRef.id,
-            values.deliveryNumber,
-            session.user.name,
-            values.serialNumber,
-            values.partId,
-            values.partNumber,
-            [modelSelection[0], modelSelection[1]]
-          );
+            //adding serial for model1 part
+            await partService.AddSerial(
+              model[0].id,
+              newPartModelDocRef.id,
+              values.deliveryNumber,
+              session.user.name,
+              values.serialNumber,
+              values.partId,
+              values.partNumber,
+              [modelSelection[0], modelSelection[1]]
+            );
 
-          await partService.UpdateStock(
-            model[0].id,
-            newPartModelDocRef.id,
-            values.partNumber
-          );
+            await partService.UpdateStock(
+              model[0].id,
+              newPartModelDocRef.id,
+              values.partNumber
+            );
 
-          if (i == 1) {
-            if (setLoading != false) {
-              setNotify({
-                isOpen: true,
-                message: 'Added successfully',
-                type: 'success',
-              });
+            if (i == 1) {
+              if (setLoading != false) {
+                setNotify({
+                  isOpen: true,
+                  message: 'Added successfully',
+                  type: 'success',
+                });
 
-              resetForm();
-              setModelSelection([]);
-              setLoading(false);
+                resetForm();
+                setModelSelection([]);
+                setLoading(false);
+              }
             }
           }
         }
@@ -538,6 +581,14 @@ function AddPart() {
           type: 'error',
         });
         setLoading(false);
+      } else if (partNumberData == 'error') {
+        setNotify({
+          isOpen: true,
+          message: 'An error occurred: 411',
+          type: 'error',
+        });
+
+        setLoading(false);
       } else {
         // Part number not in DB. Will create new model, part, add serial with logging, and update stock
 
@@ -545,39 +596,43 @@ function AddPart() {
           modelSelection[0]
         );
 
-        const newPartDocRef = await partService.CreateNewPart(
-          values.partId,
-          values.partNumber,
-          [modelSelection[0]],
-          newModelDocRef.id
-        );
+        if (newModelDocRef != 'error') {
+          const newPartDocRef = await partService.CreateNewPart(
+            values.partId,
+            values.partNumber,
+            [modelSelection[0]],
+            newModelDocRef.id
+          );
 
-        await partService.AddSerial(
-          newModelDocRef.id,
-          newPartDocRef.id,
-          values.deliveryNumber,
-          session.user.name,
-          values.serialNumber,
-          values.partId,
-          values.partNumber,
-          [modelSelection[0]]
-        );
+          if (newPartDocRef != 'error') {
+            await partService.AddSerial(
+              newModelDocRef.id,
+              newPartDocRef.id,
+              values.deliveryNumber,
+              session.user.name,
+              values.serialNumber,
+              values.partId,
+              values.partNumber,
+              [modelSelection[0]]
+            );
 
-        await partService.UpdateStock(
-          newModelDocRef.id,
-          newPartDocRef.id,
-          values.partNumber
-        );
+            await partService.UpdateStock(
+              newModelDocRef.id,
+              newPartDocRef.id,
+              values.partNumber
+            );
 
-        setNotify({
-          isOpen: true,
-          message: 'Added successfully',
-          type: 'success',
-        });
+            setNotify({
+              isOpen: true,
+              message: 'Added successfully',
+              type: 'success',
+            });
 
-        resetForm();
-        setModelSelection([]);
-        setLoading(false);
+            resetForm();
+            setModelSelection([]);
+            setLoading(false);
+          }
+        }
       }
     } else if (modelDb.length != 0 && isOnlyOne == true) {
       //iPhone model is in DB
@@ -613,8 +668,16 @@ function AddPart() {
             });
 
             setLoading(false);
+          } else if (partSharedStatus == 'error') {
+            setNotify({
+              isOpen: true,
+              message: 'An error occurred: 400',
+              type: 'error',
+            });
+
+            setLoading(false);
           } else {
-            await partService.AddSerial(
+            let results = await partService.AddSerial(
               modelDb[0].id,
               partNameData[0].id,
               values.deliveryNumber,
@@ -625,21 +688,23 @@ function AddPart() {
               [modelSelection[0]]
             );
 
-            await partService.UpdateStock(
-              modelDb[0].id,
-              partNameData[0].id,
-              values.partNumber
-            );
+            if (results != 'error') {
+              await partService.UpdateStock(
+                modelDb[0].id,
+                partNameData[0].id,
+                values.partNumber
+              );
 
-            setNotify({
-              isOpen: true,
-              message: 'Added successfully',
-              type: 'success',
-            });
+              setNotify({
+                isOpen: true,
+                message: 'Added successfully',
+                type: 'success',
+              });
 
-            resetForm();
-            setModelSelection([]);
-            setLoading(false);
+              resetForm();
+              setModelSelection([]);
+              setLoading(false);
+            }
           }
         } else {
           setNotify({
@@ -650,6 +715,14 @@ function AddPart() {
 
           setLoading(false);
         }
+      } else if (partNameData == 'error') {
+        setNotify({
+          isOpen: true,
+          message: 'An error occurred: 401',
+          type: 'error',
+        });
+
+        setLoading(false);
       } else {
         //Part name does not exist in DB
 
@@ -664,6 +737,14 @@ function AddPart() {
             type: 'error',
           });
           setLoading(false);
+        } else if (partNumberData == 'error') {
+          setNotify({
+            isOpen: true,
+            message: 'An error occurred: 402',
+            type: 'error',
+          });
+
+          setLoading(false);
         } else {
           const newPartDocRef = await partService.CreateNewPart(
             values.partId,
@@ -672,34 +753,44 @@ function AddPart() {
             modelDb[0].id
           );
 
-          await partService.AddSerial(
-            modelDb[0].id,
-            newPartDocRef.id,
-            values.deliveryNumber,
-            session.user.name,
-            values.serialNumber,
-            values.partId,
-            values.partNumber,
-            [modelSelection[0]]
-          );
+          if (newPartDocRef != 'error') {
+            await partService.AddSerial(
+              modelDb[0].id,
+              newPartDocRef.id,
+              values.deliveryNumber,
+              session.user.name,
+              values.serialNumber,
+              values.partId,
+              values.partNumber,
+              [modelSelection[0]]
+            );
 
-          await partService.UpdateStock(
-            modelDb[0].id,
-            newPartDocRef.id,
-            values.partNumber
-          );
+            await partService.UpdateStock(
+              modelDb[0].id,
+              newPartDocRef.id,
+              values.partNumber
+            );
 
-          setNotify({
-            isOpen: true,
-            message: 'Added successfully',
-            type: 'success',
-          });
+            setNotify({
+              isOpen: true,
+              message: 'Added successfully',
+              type: 'success',
+            });
 
-          resetForm();
-          setModelSelection([]);
-          setLoading(false);
+            resetForm();
+            setModelSelection([]);
+            setLoading(false);
+          }
         }
       }
+    } else if (modelDb == 'error') {
+      setNotify({
+        isOpen: true,
+        message: 'An error occurred: 405',
+        type: 'error',
+      });
+
+      setLoading(false);
     }
   };
 
