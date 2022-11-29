@@ -5,14 +5,10 @@ import {
   updateDoc,
   getDoc,
   doc,
-  setDoc,
-  onSnapshot,
   query,
-  orderBy,
   collectionGroup,
   getDocs,
   where,
-  docs,
   deleteDoc,
 } from '@firebase/firestore';
 import { db } from '/config/firebase';
