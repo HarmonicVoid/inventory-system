@@ -322,9 +322,9 @@ const ResponsiveAppBar = () => {
                         body: JSON.stringify({}),
                       });
 
-                      signOut().then(
+                      auth.signOut().then(
                         () => {
-                          auth.signOut();
+                          signOut();
                         },
                         function (error) {
                           console.log('error', error);
