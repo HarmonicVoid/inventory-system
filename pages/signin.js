@@ -31,10 +31,12 @@ function SignIn({ providers }) {
           },
           body: JSON.stringify({
             token: userCredential.user.accessToken,
+            email: session.user.email,
+            fid: session.userId,
           }),
         }).then((response) => {
           if (response.status == 200) {
-            router.push('/');
+            router.replace('/');
           }
         });
       })
