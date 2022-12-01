@@ -48,8 +48,8 @@ export default function MyTable({ data, isUsed }) {
   const [user, loading] = useAuthState(auth);
 
   if (user) {
-    user.getIdTokenResult().then((tokenResult) => {
-      user.admin = tokenResult.claims.isAdmin;
+    user.getIdTokenResult(true).then((tokenResult) => {
+      user.admin = tokenResult.claims.admin;
       user.location = tokenResult.claims.location;
     });
   }
