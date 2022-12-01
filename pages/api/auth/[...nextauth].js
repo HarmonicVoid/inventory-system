@@ -1,8 +1,8 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { adminApp } from '../firebaseAdmin';
-import { db } from '../../../config/firebase';
-import { query, collection, getDocs, where } from '@firebase/firestore';
+
+const db2 = adminApp.firestore();
 
 export default NextAuth({
   providers: [
@@ -45,7 +45,7 @@ export default NextAuth({
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       const additionalClaims = {
-        isAdmin: true,
+        admin: true,
         location: '0000547264',
       };
       await adminApp
@@ -69,25 +69,13 @@ export default NextAuth({
 });
 
 const VerifyAuth = async (email) => {
-  try {
-    const accountQuery = query(
-      collection(db, 'authUsers'),
-      where('email', '==', email)
-    );
-    const queryAccountDocs = await getDocs(accountQuery);
-    const accountData = queryAccountDocs.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+  const data = await db2.collection('authUsers').where('email', '==', email);
 
-    if (accountData.length == 0) {
-      return false;
-    } else {
-      return true;
-    }
-  } catch (e) {
-    console.log('Error getting  document:', e);
+  const emailIsEmpty = (await data.get()).empty;
 
+  if (emailIsEmpty == false) {
+    return true;
+  } else {
     return false;
   }
 };
