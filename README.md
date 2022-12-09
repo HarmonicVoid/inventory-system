@@ -10,7 +10,7 @@
 <h2>Main Features</h2>
 
 <ul>
-  <li> Real-time database updates using Firebase. Everyone will see the changes within seconds, whether a new part is added or removed.</li>
+  <li> On the fly database updates using Firebase. Everyone will see the changes within seconds.</li>
   <p></p>
   <li> Add single or multiple models that share the same part number into the inventory in one SINGLE FORM. TThe logic design process is well thought out and tackles possible what if scenarios..</li>
   <p></p>
