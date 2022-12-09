@@ -12,7 +12,7 @@
 <ul>
   <li> Real-time database updates using Firebase. Everyone will see the changes within seconds, whether a new part is added or removed.</li>
   <p></p>
-  <li> Add single or multiple models that share the same part number into the inventory in one SINGLE FORM. The system design process is well thought out and tackles all possible what-if scenarios.</li>
+  <li> Add single or multiple models that share the same part number into the inventory in one SINGLE FORM. TThe logic design process is well thought out and tackles possible what if scenarios..</li>
   <p></p>
   <li> Performing cycle count has never been easier, know which iPhone parts got utilized from the inventory. When removing a part, the serial number is required, and the system will log it by showing the user who is signed in with a timestamp.  </li>
    <p></p>
