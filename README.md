@@ -16,7 +16,7 @@
   <p></p>
   <li> Performing cycle count has never been easier, know which iPhone parts got utilized from the inventory. When removing a part, the serial number is required, and the system will log it by showing the user who is signed in with a timestamp.  </li>
    <p></p>
-  <li> Search for a specific model and search the parts available for that device. Quick access to reserve a part for a customer. When the part is used, if any reservations, the stock and reserved updated in seconds. </li>
+  <li> Search for a specific model and search the parts available for that device. Quick access to reserve a part for a customer. When the part is used, if any reservations, the stock and reserved are updated in seconds. </li>
 </ul>
 <div>
 
